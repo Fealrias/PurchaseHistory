@@ -20,8 +20,6 @@ import com.angelp.purchasehistory.web.clients.AuthClient;
 import com.angelp.purchasehistory.web.clients.WebException;
 import com.angelp.purchasehistorybackend.models.enums.UserRole;
 import com.angelp.purchasehistorybackend.models.views.outgoing.UserView;
-import com.bugfender.sdk.Bugfender;
-import com.inmobi.sdk.InMobiSdk;
 import com.supersuman.apkupdater.ApkUpdater;
 
 import java.util.Optional;

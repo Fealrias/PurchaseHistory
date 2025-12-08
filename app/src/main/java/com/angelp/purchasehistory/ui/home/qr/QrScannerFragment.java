@@ -38,7 +38,6 @@ import com.angelp.purchasehistory.components.form.TimePickerFragment;
 import com.angelp.purchasehistory.data.Constants;
 import com.angelp.purchasehistory.data.model.ScheduledNotification;
 import com.angelp.purchasehistory.databinding.FragmentQrBinding;
-import com.angelp.purchasehistory.receivers.AdListener;
 import com.angelp.purchasehistory.util.AfterTextChangedWatcher;
 import com.angelp.purchasehistory.util.AndroidUtils;
 import com.angelp.purchasehistory.util.Utils;

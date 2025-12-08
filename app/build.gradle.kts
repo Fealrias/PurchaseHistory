@@ -94,6 +94,7 @@ dependencies {
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0")
     implementation("com.github.Mohammad3125:KavehColorPicker:v1.0.0")
     implementation("uk.co.samuelwall:material-tap-target-prompt:3.3.2")
+    implementation("com.squareup.okhttp3:okhttp-testing-support:3.14.9")
 
     // Chart and graph library
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
