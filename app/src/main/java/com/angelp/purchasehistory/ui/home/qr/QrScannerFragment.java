@@ -1,5 +1,7 @@
 package com.angelp.purchasehistory.ui.home.qr;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -19,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Toast;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -26,6 +29,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+
 import com.angelp.purchasehistory.PurchaseHistoryApplication;
 import com.angelp.purchasehistory.R;
 import com.angelp.purchasehistory.components.form.CreateCategoryDialog;
@@ -34,6 +38,7 @@ import com.angelp.purchasehistory.components.form.TimePickerFragment;
 import com.angelp.purchasehistory.data.Constants;
 import com.angelp.purchasehistory.data.model.ScheduledNotification;
 import com.angelp.purchasehistory.databinding.FragmentQrBinding;
+import com.angelp.purchasehistory.receivers.AdListener;
 import com.angelp.purchasehistory.util.AfterTextChangedWatcher;
 import com.angelp.purchasehistory.util.AndroidUtils;
 import com.angelp.purchasehistory.util.Utils;
@@ -46,7 +51,7 @@ import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.integration.android.IntentIntegrator;
-import dagger.hilt.android.AndroidEntryPoint;
+
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -60,7 +65,7 @@ import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
 
-import static androidx.core.content.ContextCompat.getSystemService;
+import dagger.hilt.android.AndroidEntryPoint;
 
 //import static com.google.android.gms.ads.AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize;
 @AndroidEntryPoint
@@ -173,18 +178,21 @@ public class QrScannerFragment extends Fragment {
             qrScannerViewModel.updatePurchaseDTO(purchaseDTO);
             datePicker.setValue(purchaseDTO.getDate());
             timePicker.setValue(purchaseDTO.getTime());
-            int index = purchaseDTO.getCategoryId() != null ? Utils.findIndex(allCategories, (category) -> category.getId()!=null && category.getId().equals(purchaseDTO.getCategoryId())) : -1;
+            int index = purchaseDTO.getCategoryId() != null ? Utils.findIndex(allCategories, (category) -> category.getId() != null && category.getId().equals(purchaseDTO.getCategoryId())) : -1;
             new Handler(Looper.getMainLooper()).post(() -> {
-                if (purchaseDTO.getStoreId() != null) binding.qrStoreIdValue.setText(purchaseDTO.getStoreId());
+                if (purchaseDTO.getStoreId() != null)
+                    binding.qrStoreIdValue.setText(purchaseDTO.getStoreId());
                 if (index >= 0) binding.qrCategorySpinner.setSelection(index);
-                if (purchaseDTO.getBillId() != null) binding.qrBillIdValue.setText(purchaseDTO.getBillId());
+                if (purchaseDTO.getBillId() != null)
+                    binding.qrBillIdValue.setText(purchaseDTO.getBillId());
                 if (purchaseDTO.getPrice() != null)
                     binding.qrPriceInput.setText(AndroidUtils.formatCurrency(purchaseDTO.getPrice()));
                 if (purchaseDTO.getTimestamp() != null) {
                     binding.qrDateInput.setText(purchaseDTO.getTimestamp().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)));
                     binding.qrTimeInput.setText(purchaseDTO.getTimestamp().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)));
                 }
-                if (!StringUtils.isEmpty(purchaseDTO.getNote())) binding.qrNoteInput.setText(purchaseDTO.getNote());
+                if (!StringUtils.isEmpty(purchaseDTO.getNote()))
+                    binding.qrNoteInput.setText(purchaseDTO.getNote());
             });
         }).start();
     }
@@ -284,7 +292,7 @@ public class QrScannerFragment extends Fragment {
                 if (binding.qrPriceInput.hasFocus()) {
                     String str = binding.qrPriceInput.getText().toString();
                     if (Utils.isInvalidCurrency(str)) {
-                        binding.qrPriceInput.setError("Invalid price!");
+                        binding.qrPriceInput.setError(getString(R.string.error_invalid_price));
                         binding.qrSubmitButton.setEnabled(false);
                     } else {
                         if (str.trim().isEmpty())
@@ -324,6 +332,7 @@ public class QrScannerFragment extends Fragment {
         });
     }
 
+
     private void resetForm() {
         qrScannerViewModel.resetPurchaseDto();
         if (!binding.qrCategorySpinner.getAdapter().isEmpty())
@@ -340,6 +349,7 @@ public class QrScannerFragment extends Fragment {
 
     private void initQRCodeScanner() {
         Log.i(TAG, "initQRCodeScanner: STARTED");
+//        todo: migrate to ScanContract
         IntentIntegrator integrator = IntentIntegrator.forSupportFragment(this);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
         integrator.setOrientationLocked(true);

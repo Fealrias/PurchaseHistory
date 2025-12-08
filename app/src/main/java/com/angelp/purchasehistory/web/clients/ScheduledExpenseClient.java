@@ -27,7 +27,7 @@ public class ScheduledExpenseClient extends HttpClient {
             ResponseBody responseBody = res.body();
             if (res.isSuccessful() && responseBody != null) {
                 String json = responseBody.string();
-                Log.i("httpResponse", "Created Scheduled Expense: " + json);
+                Log.d("httpResponse", "Created Scheduled Expense: " + json);
                 return gson.fromJson(json, ScheduledExpenseView.class);
             } else {
                 throw new IOException("Failed to create scheduled expense");
@@ -43,7 +43,7 @@ public class ScheduledExpenseClient extends HttpClient {
             ResponseBody responseBody = res.body();
             if (res.isSuccessful() && responseBody != null) {
                 String json = responseBody.string();
-                Log.i("httpResponse", "Triggered Scheduled Purchase: " + json);
+                Log.d("httpResponse", "Triggered Scheduled Purchase: " + json);
                 return gson.fromJson(json, PurchaseView.class);
             } else {
                 throw new IOException("Failed to trigger scheduled purchase");
@@ -59,7 +59,7 @@ public class ScheduledExpenseClient extends HttpClient {
             ResponseBody responseBody = res.body();
             if (res.isSuccessful() && responseBody != null) {
                 String json = responseBody.string();
-                Log.i("httpResponse", "Find all scheduled expenses: " + json);
+                Log.d("httpResponse", "Find all scheduled expenses: " + json);
                 return Arrays.stream(gson.fromJson(json, ScheduledExpenseView[].class)).collect(Collectors.toList());
             } else {
                 throw new IOException("Failed to find all scheduled expenses");
@@ -89,7 +89,7 @@ public class ScheduledExpenseClient extends HttpClient {
             ResponseBody responseBody = res.body();
             if (res.isSuccessful() && responseBody != null) {
                 String json = responseBody.string();
-                Log.i("httpResponse", "Edited Scheduled Expense: " + json);
+                Log.d("httpResponse", "Edited Scheduled Expense: " + json);
                 return gson.fromJson(json, ScheduledExpenseView.class);
             } else {
                 throw new IOException("Failed to edit scheduled expense");

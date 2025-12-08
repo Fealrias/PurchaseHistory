@@ -26,7 +26,7 @@ public class ObserverClient extends HttpClient {
             ResponseBody body = res.body();
             if (body != null) {
                 String json = body.string();
-                Log.i("httpResponse", "Observed users: " + json);
+                Log.d("httpResponse", "Observed users: " + json);
                 if (res.isSuccessful())
                     return gson.fromJson(json, new TypeToken<List<UserView>>() {
                     }.getType());
@@ -46,7 +46,7 @@ public class ObserverClient extends HttpClient {
             ResponseBody body = res.body();
             if (body != null) {
                 String json = body.string();
-                Log.i("httpResponse", "Observed user: " + json);
+                Log.d("httpResponse", "Observed user: " + json);
                 if (res.isSuccessful())
                     return gson.fromJson(json, UserView.class);
                 else {

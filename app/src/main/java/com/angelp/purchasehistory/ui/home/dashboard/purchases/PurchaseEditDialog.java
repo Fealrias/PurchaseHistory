@@ -1,5 +1,7 @@
 package com.angelp.purchasehistory.ui.home.dashboard.purchases;
 
+import static com.angelp.purchasehistory.data.Constants.Arguments.PURCHASE_EDIT_DIALOG_ID_KEY;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -9,10 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
+
 import com.angelp.purchasehistory.PurchaseHistoryApplication;
 import com.angelp.purchasehistory.R;
 import com.angelp.purchasehistory.components.form.CreateCategoryDialog;
@@ -27,12 +31,9 @@ import com.angelp.purchasehistory.web.clients.PurchaseClient;
 import com.angelp.purchasehistorybackend.models.views.incoming.PurchaseDTO;
 import com.angelp.purchasehistorybackend.models.views.outgoing.CategoryView;
 import com.angelp.purchasehistorybackend.models.views.outgoing.PurchaseView;
-import dagger.hilt.android.AndroidEntryPoint;
-import lombok.Getter;
-import lombok.Setter;
+
 import org.jetbrains.annotations.NotNull;
 
-import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.format.DateTimeFormatter;
@@ -41,7 +42,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static com.angelp.purchasehistory.data.Constants.Arguments.PURCHASE_EDIT_DIALOG_ID_KEY;
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -121,7 +126,7 @@ public class PurchaseEditDialog extends DialogFragment {
             public void afterTextChanged(Editable s) {
                 String str = binding.purchaseEditPriceInput.getText().toString();
                 if (Utils.isInvalidCurrency(str)) {
-                    binding.purchaseEditPriceInput.setError("Invalid price!");
+                    binding.purchaseEditPriceInput.setError(getString(R.string.error_invalid_price));
                     binding.purchaseEditSaveButton.setEnabled(false);
                 } else {
                     if (str.trim().isEmpty()) purchase.setPrice(new BigDecimal(BigInteger.ZERO));

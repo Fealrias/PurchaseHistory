@@ -14,6 +14,7 @@
         android:layout_gravity="center_vertical"
         android:layout_marginStart="-20dp"
         android:alpha="70"
+        android:importantForAccessibility="no"
         android:padding="0dp"
         android:src="@mipmap/barchart"
         app:layout_constraintStart_toStartOf="parent"

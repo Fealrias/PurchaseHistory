@@ -27,6 +27,7 @@ import com.angelp.purchasehistory.R;
 import com.angelp.purchasehistory.databinding.ActivityRegisterBinding;
 import com.angelp.purchasehistory.ui.legal.PrivacyPolicyActivity;
 import com.angelp.purchasehistory.ui.legal.TermsAndConditionsActivity;
+import com.angelp.purchasehistory.ui.login.LoginActivity;
 import com.angelp.purchasehistory.util.AfterTextChangedWatcher;
 import com.angelp.purchasehistory.web.clients.WebException;
 import com.angelp.purchasehistorybackend.models.views.outgoing.UserView;
@@ -94,6 +95,10 @@ public class RegisterActivity extends AppCompatActivity {
                 binding.errorLabel.setVisibility(View.INVISIBLE);
                 updateUiWithUser(registerResult.getSuccess());
                 setResult(Activity.RESULT_OK);
+                Intent toLogin = new Intent(this, LoginActivity.class);
+                toLogin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+
+                startActivity(toLogin );
                 finish();
             }
         });
@@ -140,7 +145,9 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void initializeRecaptchaClient() {
-        Recaptcha.fetchTaskClient(PurchaseHistoryApplication.getInstance(), "6Lcg2SAsAAAAAOmgmnY1hVNs6iyZa2uPJLIXibxK").addOnSuccessListener(this, client -> recaptchaTasksClient = client).addOnFailureListener(this, e -> Log.e("RECAPTCHA", "initializeRecaptchaClient: Fail error:" + e.getMessage()));
+        Recaptcha.fetchTaskClient(PurchaseHistoryApplication.getInstance(), "6Lcg2SAsAAAAAOmgmnY1hVNs6iyZa2uPJLIXibxK")
+                .addOnSuccessListener(this, client -> recaptchaTasksClient = client)
+                .addOnFailureListener(this, e -> Log.e("RECAPTCHA", "initializeRecaptchaClient: Fail error:" + e.getMessage()));
     }
 
     private void checkIfLoggedIn() {

@@ -1,15 +1,17 @@
 package com.angelp.purchasehistory.web;
 
 import android.util.Log;
+
 import com.angelp.purchasehistory.R;
 import com.angelp.purchasehistory.web.clients.ErrorResponse;
 import com.angelp.purchasehistory.web.clients.WebException;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 import java.io.IOException;
+
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 public class WebUtils {
     private final String TAG = WebUtils.class.getSimpleName();
@@ -35,7 +37,7 @@ public class WebUtils {
     }
 
     public <T> T getBody(String json, Class<T> clazz) {
-        Log.i(TAG, "Received response " + json);
+        Log.d(TAG, "Received response " + json);
         try {
             return gson.fromJson(json, clazz);
         } catch (JsonSyntaxException e) {

@@ -1,5 +1,7 @@
 package com.angelp.purchasehistory.util;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -49,8 +51,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-import static android.content.Context.MODE_PRIVATE;
-
 public final class AndroidUtils {
     public static final List<String> SCHEDULED_PERIOD_LIST = Arrays.stream(ScheduledPeriod.values()).map(Enum::toString).collect(Collectors.toList());
     public static final int SAVE_CSV_REQUEST_CODE = 199999;
@@ -75,7 +75,7 @@ public final class AndroidUtils {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         ShortcutManagerCompat.removeAllDynamicShortcuts(context);
         NotificationHelper.cancelAllScheduledNotifications(context);
-        if (purchaseClient!=null) purchaseClient.cleanCache();
+        if (purchaseClient != null) purchaseClient.cleanCache();
         SharedPreferences player = context.getSharedPreferences("player", MODE_PRIVATE);
         player.edit().clear().apply();
         context.startActivity(intent);
@@ -174,7 +174,12 @@ public final class AndroidUtils {
 
     @NotNull
     public static String formatCurrency(BigDecimal price) {
-        return String.format(Locale.getDefault(), "%.2f", price.floatValue());
+        return formatCurrency(price.floatValue());
+    }
+
+    @NotNull
+    public static String formatCurrency(float price) {
+        return String.format(Locale.US, "%.2f", price);
     }
 
     @NotNull
@@ -185,7 +190,7 @@ public final class AndroidUtils {
 
     @NotNull
     public static String formatCurrency(float price, Context context) {
-        return String.format(Locale.getDefault(), "%.2f %s", price, getCurrencySymbol(context));
+        return String.format(Locale.US, "%.2f %s", price, getCurrencySymbol(context));
     }
 
     public static String getCurrencySymbol(Context context) {

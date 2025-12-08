@@ -80,7 +80,7 @@ public class AuthClient extends HttpClient {
         try (Response res = get(BACKEND_URL + "/users/self/get")) {
             if (res.isSuccessful() && res.body() != null) {
                 String json = res.body().string();
-                Log.i("httpResponse", "getLoggedUser: " + json);
+                Log.d("httpResponse", "getLoggedUser: " + json);
                 result = gson.fromJson(json, UserView.class);
                 PurchaseHistoryApplication.getInstance().getLoggedUser().postValue(result);
                 Log.d("jwt_valid", "JWT Valid, user is logged in");

@@ -14,7 +14,7 @@ android {
         minSdk = 29
         targetSdk = AndroidVersion.VersionCodes.TIRAMISU
         versionCode = 9
-        versionName = "1.3.0"
+        versionName = "1.3.1"
         testInstrumentationRunner = "com.angelp.purchasehistory.setup.CustomTestRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -23,12 +23,18 @@ android {
 
     buildTypes {
         debug {
-            isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
@@ -57,6 +63,8 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment:2.9.6")
     implementation("androidx.navigation:navigation-ui:2.9.6")
     implementation(files("libs/OutgoingViews_PurchaseHistory.jar-0.7.0-plain.jar"))
+//    auto update
+    implementation("com.github.supersu-man:apkupdater-library:v2.1.0")
 
     //captcha
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
@@ -67,7 +75,6 @@ dependencies {
     implementation("com.google.zxing:core:3.5.4")
     implementation("com.opencsv:opencsv:5.12.0")
 //    Web
-    implementation("com.squareup.okhttp3:okhttp-testing-support:3.14.9")
     implementation("com.google.code.gson:gson:2.13.2")
     implementation("dev.gustavoavila:java-android-websocket-client:2.0.2")
 
@@ -86,7 +93,7 @@ dependencies {
 //  UI
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0")
     implementation("com.github.Mohammad3125:KavehColorPicker:v1.0.0")
-    implementation ("uk.co.samuelwall:material-tap-target-prompt:3.3.2")
+    implementation("uk.co.samuelwall:material-tap-target-prompt:3.3.2")
 
     // Chart and graph library
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")

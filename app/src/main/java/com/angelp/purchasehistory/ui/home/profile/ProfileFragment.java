@@ -8,12 +8,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
+
 import com.angelp.purchasehistory.PurchaseHistoryApplication;
 import com.angelp.purchasehistory.R;
 import com.angelp.purchasehistory.data.Constants;
@@ -25,10 +27,12 @@ import com.angelp.purchasehistory.web.clients.UserClient;
 import com.angelp.purchasehistorybackend.models.views.outgoing.UserAnalytics;
 import com.angelp.purchasehistorybackend.models.views.outgoing.UserView;
 import com.angelp.purchasehistorybackend.models.views.outgoing.analytics.CategoryAnalyticsEntry;
-import dagger.hilt.android.AndroidEntryPoint;
+
+import java.util.Optional;
 
 import javax.inject.Inject;
-import java.util.Optional;
+
+import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class ProfileFragment extends Fragment {
@@ -62,8 +66,8 @@ public class ProfileFragment extends Fragment {
                     Drawable background = binding.mostFrequentlyPurchasedCategoryName.getBackground();
                     background.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SCREEN));
                     binding.mostFrequentlyPurchasedCategoryName.setTextColor(textColor);
-
                     binding.mostFrequentlyPurchasedCategoryName.setText(category.getCategory().getName());
+
                     binding.mostFrequentlyPurchasedCategoryCount.setText(getString(R.string.most_frequently_purchased_category_count, category.getCount().toString()));
                     binding.mostFrequentlyPurchasedCategorySum.setText(getString(R.string.most_frequently_purchased_category_sum, AndroidUtils.formatCurrency(category.getSum(), getContext())));
                 } else {

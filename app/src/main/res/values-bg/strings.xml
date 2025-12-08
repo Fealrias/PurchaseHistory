@@ -308,5 +308,7 @@
     <string name="about_us_conclusion">\tБлагодяра Ви за това че използвате приложението ни. Надяваме се че ще Ви бъде от полза\n\n\tПриятно спестяване! ☻</string>
     <string name="loading_login">Зареждане на профил…</string>
     <string name="captcha_fail">Неуспешна reCaptcha, моля опитайте отново.</string>
-
+    <string name="update_available">Приложението има нова версия!</string>
+    <string name="update_available_description">Бихте ли искали да я изтеглите сега?</string>
+    <string name="download">Изтегли</string>
 </resources>

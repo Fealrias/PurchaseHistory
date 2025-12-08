@@ -22,7 +22,7 @@ public class SettingsClient extends HttpClient {
         try (Response res = post(BACKEND_URL + "/monthly-limit", monthlyLimit)) {
             if (res.isSuccessful() && res.body() != null) {
                 String json = res.body().string();
-                Log.i("httpResponse", "addMonthlyLimit: " + json);
+                Log.d("httpResponse", "addMonthlyLimit: " + json);
                 return gson.fromJson(json, MonthlyLimitView.class);
             }
         } catch (IOException e) {
@@ -35,7 +35,7 @@ public class SettingsClient extends HttpClient {
         try (Response res = get(BACKEND_URL + "/monthly-limit")) {
             if (res.isSuccessful() && res.body() != null) {
                 String json = res.body().string();
-                Log.i("httpResponse", "getMonthlyLimits: " + json);
+                Log.d("httpResponse", "getMonthlyLimits: " + json);
                 return Arrays.stream(gson.fromJson(json, MonthlyLimitView[].class)).collect(Collectors.toList());
             }
         } catch (IOException e) {
@@ -48,7 +48,7 @@ public class SettingsClient extends HttpClient {
         try (Response res = put(BACKEND_URL + "/monthly-limit/" + id, monthlyLimit)) {
             if (res.isSuccessful() && res.body() != null) {
                 String json = res.body().string();
-                Log.i("httpResponse", "updateMonthlyLimit: " + json);
+                Log.d("httpResponse", "updateMonthlyLimit: " + json);
                 return gson.fromJson(json, MonthlyLimitView.class);
             }
         } catch (IOException e) {

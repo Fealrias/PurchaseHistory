@@ -31,10 +31,9 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import dagger.hilt.android.AndroidEntryPoint;
+
 import org.jetbrains.annotations.NotNull;
 
-import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -42,6 +41,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class BarChartFragment extends RefreshablePurchaseFragment implements OnChartValueSelectedListener {
@@ -170,8 +173,8 @@ public class BarChartFragment extends RefreshablePurchaseFragment implements OnC
             binding.barChartView.setData(data);
             binding.barChartView.notifyDataSetChanged();
             binding.barChartView.animateY(1000);
-            new Thread(()->{
-                if (legendId != null && getActivity()!=null) {
+            new Thread(() -> {
+                if (legendId != null && getActivity() != null) {
                     Legend legend = binding.barChartView.getLegend();
                     ListView listView = getActivity().findViewById(legendId);
                     legend.setEnabled(AndroidUtils.setLegendList(legend, listView));

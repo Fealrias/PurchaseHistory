@@ -8,68 +8,53 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.autofill.AutofillManager;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
+
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+
 import com.angelp.purchasehistory.R;
 import com.angelp.purchasehistory.databinding.ActivityLoginBinding;
 import com.angelp.purchasehistory.receivers.scheduled.NotificationHelper;
 import com.angelp.purchasehistory.ui.forgotpassword.ForgotPasswordEmailActivity;
 import com.angelp.purchasehistory.ui.home.HomeActivity;
 import com.angelp.purchasehistory.util.AfterTextChangedWatcher;
+import com.angelp.purchasehistory.util.AndroidUtils;
 import com.angelp.purchasehistory.web.clients.ScheduledExpenseClient;
 import com.angelp.purchasehistorybackend.models.views.outgoing.ScheduledExpenseView;
-import dagger.hilt.android.AndroidEntryPoint;
+
+import java.util.List;
 
 import javax.inject.Inject;
-import java.util.List;
+
+import dagger.hilt.android.AndroidEntryPoint;
+import lombok.NonNull;
 
 @AndroidEntryPoint
 public class LoginActivity extends AppCompatActivity {
-
+    private ActivityLoginBinding binding;
     private LoginViewModel loginViewModel;
     @Inject
     ScheduledExpenseClient scheduledExpenseClient;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        com.angelp.purchasehistory.databinding.ActivityLoginBinding binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         loginViewModel = new ViewModelProvider(this)
                 .get(LoginViewModel.class);
         checkIfLoggedIn();
-
-        final EditText usernameEditText = binding.username;
-        final EditText passwordEditText = binding.password;
-        final Button loginButton = binding.loginLoginButton;
-        final Button forgotPasswordButton = binding.forgotPasswordButton;
-        final ProgressBar loadingProgressBar = binding.loading;
-
         binding.backButton.setOnClickListener((view) -> onBackPressed());
-
-        loginViewModel.getLoginFormState().observe(this, loginFormState -> {
-            if (loginFormState == null) {
-                return;
-            }
-            loginButton.setEnabled(loginFormState.isDataValid());
-            if (loginFormState.getUsernameError() != null) {
-                usernameEditText.setError(getString(loginFormState.getUsernameError()));
-            }
-            if (loginFormState.getPasswordError() != null) {
-                passwordEditText.setError(getString(loginFormState.getPasswordError()));
-            }
-        });
-
         loginViewModel.getLoginResult().observe(this, loginResult -> {
-            loadingProgressBar.setVisibility(View.GONE);
-            loginButton.setEnabled(true);
+            binding.loading.setVisibility(View.GONE);
+            binding.loginLoginButton.setEnabled(true);
             if (loginResult.getSuccess() == null) {
                 showLoginFailed(loginResult.getError());
             } else {
@@ -85,30 +70,39 @@ public class LoginActivity extends AppCompatActivity {
         TextWatcher afterTextChangedListener = new AfterTextChangedWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
-                loginViewModel.loginDataChanged(usernameEditText.getText().toString().trim(),
-                        passwordEditText.getText().toString().trim());
+                onFormChange();
             }
         };
-        usernameEditText.addTextChangedListener(afterTextChangedListener);
-        passwordEditText.addTextChangedListener(afterTextChangedListener);
-        passwordEditText.setOnEditorActionListener((v, actionId, event) -> {
+        binding.username.addTextChangedListener(afterTextChangedListener);
+        binding.password.addTextChangedListener(afterTextChangedListener);
+        binding.password.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                attemptLogin(usernameEditText, passwordEditText);
+                attemptLogin(binding.username, binding.password);
             }
             return false;
         });
 
-        loginButton.setOnClickListener(v -> {
-            loadingProgressBar.setVisibility(View.VISIBLE);
-            loginButton.setEnabled(false);
-            attemptLogin(usernameEditText, passwordEditText);
+        binding.loginLoginButton.setOnClickListener(v -> {
+            binding.loading.setVisibility(View.VISIBLE);
+            binding.loginLoginButton.setEnabled(false);
+            attemptLogin(binding.username, binding.password);
         });
-        forgotPasswordButton.setOnClickListener(v -> {
+        binding.forgotPasswordButton.setOnClickListener(v -> {
             Intent intent = new Intent(this, ForgotPasswordEmailActivity.class);
             startActivity(intent);
         });
+        AutofillManager afm = getSystemService(AutofillManager.class);
+
+        afm.registerCallback(new AutofillManager.AutofillCallback() {
+            @Override
+            public void onAutofillEvent(@NonNull View view, int event) {
+                super.onAutofillEvent(view, event);
+                onFormChange();
+            }
+        });
 //        binding.googleSignInButton.setOnClickListener((v)-> loginWithGoogle());
     }
+
 
     private void scheduleNotificationsFromUser(Context context) {
         new Thread(() -> {
@@ -138,8 +132,28 @@ public class LoginActivity extends AppCompatActivity {
                 .setMessage(errorString).create().show();
     }
 
+    private void onFormChange() {
+        String username = binding.username.getText().toString().trim();
+        String password = binding.password.getText().toString().trim();
+        boolean isValid = validate(username, password);
+        binding.loginLoginButton.setEnabled(isValid);
+    }
+
+    private boolean validate(String username, String password) {
+        if (AndroidUtils.isUserNameInvalid(username)) {
+            binding.username.setError(getString(R.string.invalid_username));
+            return false;
+        }
+        if (AndroidUtils.isPasswordInvalid(password)) {
+            binding.username.setError(null);
+            binding.password.setError(getString(R.string.invalid_password));
+            return false;
+        }
+        binding.password.setError(null);
+        return true;
+    }
+}
+
 
 //    private void loginWithGoogle() {
 //    }
-
-}

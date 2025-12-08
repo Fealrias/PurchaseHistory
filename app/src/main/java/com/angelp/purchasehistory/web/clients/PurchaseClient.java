@@ -92,7 +92,7 @@ public class PurchaseClient extends HttpClient {
             if (res.isSuccessful() && body != null) {
                 String json = body.string();
                 body.close();
-                Log.i("httpResponse", "Edit Purchase: " + json);
+                Log.d("httpResponse", "Edit Purchase: " + json);
                 return gson.fromJson(json, PurchaseResponse.class).toPurchaseView();
             } else throw new IOException("Failed to edit purchase");
         } catch (IOException ignored) {
@@ -108,7 +108,7 @@ public class PurchaseClient extends HttpClient {
             if (body != null) {
                 String json = body.string();
                 body.close();
-                Log.i("httpResponse", "Get all purchases: " + json);
+                Log.d("httpResponse", "Get all purchases: " + json);
                 if (res.isSuccessful())
                     return Arrays.stream(gson.fromJson(json, PurchaseResponse[].class)).map(PurchaseResponse::toPurchaseView).collect(Collectors.toList());
                 else {
@@ -137,7 +137,7 @@ public class PurchaseClient extends HttpClient {
             if (body != null) {
                 String json = body.string();
                 body.close();
-                Log.i("httpResponse", "Get all purchases: " + json);
+                Log.d("httpResponse", "Get all purchases: " + json);
                 if (res.isSuccessful()) {
                     return gson.fromJson(json, new TypeToken<PageView<PurchaseView>>() {
                     }.getType());
@@ -158,7 +158,7 @@ public class PurchaseClient extends HttpClient {
             if (body != null) {
                 String json = body.string();
                 body.close();
-                Log.i("httpResponse", "Get all purchases: " + json);
+                Log.d("httpResponse", "Get all purchases: " + json);
                 if (res.isSuccessful()) {
                     return gson.fromJson(json, CalendarReport.class);
                 } else {
@@ -178,7 +178,7 @@ public class PurchaseClient extends HttpClient {
             if (body != null) {
                 String json = body.string();
                 body.close();
-                Log.i("httpResponse", "Get all purchases: " + json);
+                Log.d("httpResponse", "Get all purchases: " + json);
                 if (res.isSuccessful()) {
                     return gson.fromJson(json, CalendarReport.class);
                 } else {
@@ -199,7 +199,7 @@ public class PurchaseClient extends HttpClient {
             if (body != null) {
                 String json = body.string();
                 body.close();
-                Log.i("httpResponse", "Get all categories: " + json);
+                Log.d("httpResponse", "Get all categories: " + json);
                 if (res.isSuccessful())
                     return Arrays.stream(gson.fromJson(json, CategoryView[].class)).collect(Collectors.toList());
                 else {
@@ -219,7 +219,7 @@ public class PurchaseClient extends HttpClient {
             if (res.isSuccessful() && body != null) {
                 String json = body.string();
                 body.close();
-                Log.i("httpResponse", "Created Category: " + json);
+                Log.d("httpResponse", "Created Category: " + json);
                 return gson.fromJson(json, Category.class);
             } else throw new IOException("Failed to create category");
         } catch (IOException ignored) {
@@ -235,7 +235,7 @@ public class PurchaseClient extends HttpClient {
             if (res.isSuccessful() && body != null) {
                 String json = body.string();
                 body.close();
-                Log.i("httpResponse", "Edited Category: " + json);
+                Log.d("httpResponse", "Edited Category: " + json);
                 return gson.fromJson(json, Category.class);
             } else throw new IOException("Failed to edit category");
         } catch (IOException ignored) {
@@ -251,7 +251,7 @@ public class PurchaseClient extends HttpClient {
             if (res.isSuccessful() && body != null) {
                 String json = body.string();
                 body.close();
-                Log.i("httpResponse", "Delete Category: " + json);
+                Log.d("httpResponse", "Delete Category: " + json);
             } else throw new IOException("Failed to delete category");
         } catch (IOException ignored) {
         } finally {
@@ -301,7 +301,7 @@ public class PurchaseClient extends HttpClient {
             if (body != null) {
                 String json = body.string();
                 body.close();
-                Log.i("httpResponse", "getCategoryAnalyticsReport : " + json);
+                Log.d("httpResponse", "getCategoryAnalyticsReport : " + json);
                 if (res.isSuccessful()) {
                     return gson.fromJson(json, CategoryAnalyticsReport.class);
                 }

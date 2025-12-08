@@ -21,6 +21,8 @@
         android:inputType="textEmailAddress"
         android:minHeight="48dp"
         android:selectAllOnFocus="true"
+        android:importantForAutofill="yes"
+        android:autofilledHighlight="@drawable/autofilled_highlight"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imageView3" />
@@ -36,6 +38,8 @@
         android:imeOptions="actionDone"
         android:inputType="textPassword"
         android:minHeight="48dp"
+        android:importantForAutofill="yes"
+        android:autofilledHighlight="@drawable/autofilled_highlight"
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,7 +47,7 @@
 
     <Button
         android:id="@+id/login_loginButton"
-        style="@style/Bordered"
+        style="@style/Primary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"

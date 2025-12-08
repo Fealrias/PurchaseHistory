@@ -314,4 +314,7 @@ Here you can:\n
     <string name="about_us_conclusion">\tThank you for using our app! We hope it helps you save money.\n\n\tHappy spending (and saving)! ☻</string>
     <string name="loading_login">Logging in…</string>
     <string name="captcha_fail">Failed to pass reCaptcha, try again.</string>
+    <string name="update_available">A new update is available!</string>
+    <string name="update_available_description">A new version is available, would you like to download it now?</string>
+    <string name="download">Download</string>
 </resources>

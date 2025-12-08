@@ -57,6 +57,7 @@
         android:id="@+id/see_all_backdrop"
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:importantForAccessibility="no"
         android:src="@drawable/gradient"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
