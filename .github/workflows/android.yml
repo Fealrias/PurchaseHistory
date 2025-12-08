@@ -51,7 +51,7 @@ jobs:
       - name: Get current date and version
         id: version
         run: |
-          VERSION_NAME=$(./gradlew properties --quiet --console=plain | grep "^versionName:" | awk '{print $2}')
+          VERSION_NAME=$(awk -F'"' '/versionName/ {print $2}' ./app/build.gradle.kts)
           DATE=$(date +'%Y-%m-%d-%H%M%S')
           echo "$DATE :: Building version $VERSION_NAME"
           echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_ENV
@@ -85,7 +85,7 @@ jobs:
           body: |
             # Release v${{env.VERSION_NAME}}
             ## ${{ github.event.head_commit.message }}
-            ### Date: ${{ env.date }}
+            ### Date: ${{ env.DATE }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
