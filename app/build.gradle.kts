@@ -70,6 +70,10 @@ dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
     implementation("com.google.android.recaptcha:recaptcha:18.8.0")
 
+//    feeding bugs
+    implementation("com.bugfender.sdk:android:3.+")
+
+
 //    QR reading
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation("com.google.zxing:core:3.5.4")

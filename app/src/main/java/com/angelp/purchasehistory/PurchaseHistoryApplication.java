@@ -4,8 +4,12 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.widget.Toast;
+
 import androidx.lifecycle.MutableLiveData;
+
 import com.angelp.purchasehistorybackend.models.views.outgoing.UserView;
+import com.bugfender.sdk.Bugfender;
+
 import dagger.hilt.android.HiltAndroidApp;
 import lombok.Getter;
 
@@ -27,6 +31,10 @@ public class PurchaseHistoryApplication extends Application {
         instance = this;
         super.onCreate();
         initializeJWT();
+        Bugfender.init(this, "rG4Ka1Z1XsPrqd6TunWANIdAcpyemDjx", true, true);
+        Bugfender.enableCrashReporting();
+        Bugfender.enableUIEventLogging(this);
+        Bugfender.enableLogcatLogging();
         Thread.setDefaultUncaughtExceptionHandler(new GlobalExceptionHandler(this));
     }
 

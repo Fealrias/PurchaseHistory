@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
                     if (!loggedUser.isPresent()) loggedUser = authClient.getLoggedUser();
                     this.runOnUiThread(() -> binding.loadingMain.setVisibility(View.GONE));
                     if (loggedUser.isPresent()) {
+                        Bugfender.setDeviceString("user email", loggedUser.get().getEmail());
                         root.getLoggedUser().postValue(loggedUser.get());
                         if (UserRole.OBSERVER_ROLE.toString().equals(loggedUser.get().getRole()))
                             startSpectatorActivity();
