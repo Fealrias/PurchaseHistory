@@ -2,6 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:ads="http://schemas.android.com/apk/lib/com.inmobi.ads"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.home.dashboard.DashboardFragment">
@@ -186,16 +188,16 @@
         app:layout_constraintStart_toEndOf="@+id/qr_submitButton"
         app:layout_constraintTop_toTopOf="@+id/qr_submitButton" />
 
-    <!--    <com.google.android.gms.ads.AdView
-            xmlns:ads="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/adView"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            ads:adSize="BANNER"
-            ads:adUnitId="ca-app-pub-9339704833965519/5033206617"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />-->
-
+    <com.inmobi.ads.InMobiBanner
+        android:id="@+id/banner"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="60dp"
+        ads:placementId="plid-10000559129"
+        ads:refreshInterval="60"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/qr_submitButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

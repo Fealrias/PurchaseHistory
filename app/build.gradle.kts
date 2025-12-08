@@ -100,7 +100,19 @@ dependencies {
     implementation("com.tradingview:lightweightcharts:4.0.0")
     implementation("androidx.preference:preference:1.2.1")
     implementation("androidx.paging:paging-guava:3.3.6")
+
+    //  https://support.inmobi.com/monetize/sdk-documentation/android-guidelines/overview-android-guidelines
+    implementation("com.inmobi.monetization:inmobi-ads-kotlin:11.1.0")
 //    implementation("com.google.android.gms:play-services-ads:23.4.0")
+    implementation("com.google.android.gms:play-services-ads-identifier:18.0.1")
+    implementation("androidx.browser:browser:1.8.0")
+    implementation("com.squareup.picasso:picasso:2.8")
+    implementation("com.squareup.okhttp3:okhttp:3.14.9")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.1")
+    implementation("androidx.core:core-ktx:1.5.0")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.1.21")
+    implementation("com.squareup.okio:okio:3.7.0")
+    implementation("androidx.media3:media3-exoplayer:1.4.1")
 
     androidTestImplementation(platform("androidx.compose:compose-bom:2025.12.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")

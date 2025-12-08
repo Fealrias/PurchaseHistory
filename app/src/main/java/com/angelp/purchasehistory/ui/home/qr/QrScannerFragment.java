@@ -330,6 +330,7 @@ public class QrScannerFragment extends Fragment {
                 else qrScannerViewModel.getPurchaseDTO().setCategoryId(null);
             }
         });
+        binding.banner.setListener(new AdListener());
     }
 
 

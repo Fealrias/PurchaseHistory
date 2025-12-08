@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        initializeAds();
         binding.loginButton.setOnClickListener(this::startLoginActivity);
         binding.registerButton.setOnClickListener(this::startRegisterActivity);
         updateIfAvailable();
@@ -109,6 +109,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void initializeAds() {
+        InMobiSdk.init(this, "ee3dc7404a2a468bbb9325ecaf630fe4", null, error -> {
+            if (null != error) {
+                Log.e("ADS", "InMobi Init failed -" + error.getMessage());
+            } else {
+                Log.d("ADS", "InMobi Init Successful");
+            }
+        });
+    }
     private void startHomeActivity() {
         Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
