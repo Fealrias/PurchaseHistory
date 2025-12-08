@@ -11,21 +11,11 @@ jobs:
     name: Android Build And Deploy
     runs-on: ubuntu-latest # using ubuntu latest version / or you can use a specific version
     steps:
-      - name: Get current date
-        id: date
-        run: echo "date=$(date +'%Y-%m-%d-%H%M%S')" >> $GITHUB_ENV
-        
       - name: Check out Git repository # clone the repo to local ci workspace
         uses: actions/checkout@v6.0.1
-
-      - name: Get current date
-        id: version
-        run: echo "VERSION_NAME=$(grep -E 'versionName\s*[:=]' ./build.gradle.kts | sed -E -e 's/.*versionName\s*[:=]\s*["'"'"']([^"'"'"']+)["'"'"'].*/\1/' | head -1)" >> $GITHUB_ENV
-      
-      - run: echo "Building version ${{ env.VERSION_NAME }}"
       
       - name: Set up our JDK environment # setup JDK environment: mandatory as we need to build  android project
-        uses: actions/setup-java@v5.1.0
+        uses: actions/setup-java@v1.4.3
         with:
           java-version: 17
           cache: gradle
@@ -40,16 +30,15 @@ jobs:
           echo "BUILD_TOOL_VERSION=$BUILD_TOOL_VERSION" >> $GITHUB_ENV
           echo Last build tool version is: $BUILD_TOOL_VERSION
 
-
       # configure cash for gradle : will help to reduce build time
       - name: Cache Gradle Wrapper
-        uses: actions/cache@v4.3.0
+        uses: actions/cache@v3.4.3
         with:
           path: ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
 
       - name: Cache Gradle Dependencies
-        uses: actions/cache@v4.3.0
+        uses: actions/cache@v3.4.3
         with:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-caches-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
@@ -59,7 +48,15 @@ jobs:
       - name: Make Gradlew Executable
         run: chmod +x ./gradlew
 
-      
+      - name: Get current date and version
+        id: version
+        run: |
+          VERSION_NAME=$(./gradlew properties --quiet --console=plain | grep "^versionName:" | awk '{print $2}')
+          DATE=$(date +'%Y-%m-%d-%H%M%S')
+          echo "$DATE :: Building version $VERSION_NAME"
+          echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_ENV
+          echo "DATE=$DATE" >> $GITHUB_ENV
+          
       - name: Generate App APK
         id: generate_apk
         run: |
@@ -81,12 +78,12 @@ jobs:
         uses: actions/create-release@v1
         id: create_release
         with:
-          draft: false
+          draft: true
           prerelease: false
-          release_name: APK Release ${{ env.date }}
+          release_name: APK Release v${{env.VERSION_NAME}} ${{ env.date }}
           tag_name: v${{env.VERSION_NAME}}
           body: |
-            # Latest android release of the application
+            # Release v${{env.VERSION_NAME}}
             ## ${{ github.event.head_commit.message }}
             ### Date: ${{ env.date }}
         env:
