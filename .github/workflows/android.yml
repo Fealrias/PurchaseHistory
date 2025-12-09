@@ -2,7 +2,7 @@ name: Android Build apk and Upload Release
 
 on:
   push:
-    branches: [ "main", "test-workflow" ]
+    branches: [ "main" ]
 
 permissions: write-all
 
@@ -97,5 +97,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
           asset_path: ${{steps.sign_app.outputs.signedReleaseFile}}
-          asset_name: purchaseHistory-v${{env.VERSION_NAME}}.apk
+          asset_name: purchaseHistory-${{env.VERSION_NAME}}.apk
           asset_content_type: application/vnd.android.package-archive
