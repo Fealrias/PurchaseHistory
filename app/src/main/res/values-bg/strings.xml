@@ -311,4 +311,5 @@
     <string name="update_available">Приложението има нова версия!</string>
     <string name="update_available_description">Бихте ли искали да изтеглите версия %s сега?</string>
     <string name="download">Изтегли</string>
+    <string name="scan_the_qr">Сканирай QR кода от касовия бон</string>
 </resources>
