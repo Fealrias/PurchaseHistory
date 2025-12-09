@@ -18,10 +18,7 @@ import javax.inject.Singleton;
 
 @Singleton
 public class VersionUpdater extends HttpClient {
-    private static final String REPO_URL = "https://github.com/Fealrias/PurchaseHistory/releases/latest";
-    private static final String USER_AGENT = "PurchaseHistory-App/1.0";
     private static final String TAG = "version-update";
-    public static final String FILENAME = "/androidbuild.apk";
     public static final String REPO_DOWNLOAD_URL = "https://github.com/Fealrias/PurchaseHistory/releases/download/v";
 
     @Inject
@@ -68,14 +65,14 @@ public class VersionUpdater extends HttpClient {
 
     private void download(Update update, Context context) {
         String version = update.getLatestVersion();
-        String fileName = "purchase_history_"+ version +".apk";
-        String uriString  = REPO_DOWNLOAD_URL + version + FILENAME;
+        String filename = "purchaseHistory-" + version + ".apk";
+        String uriString = REPO_DOWNLOAD_URL + version + "/" + filename;
         Uri uri = Uri.parse(uriString);
 
         DownloadManager.Request request = new DownloadManager.Request(uri);
         request.setTitle(version);
         request.setDescription("Downloading latest update of PurchaseHistory...");
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, filename);
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
         request.setMimeType("application/vnd.android.package-archive");
 
