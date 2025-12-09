@@ -49,7 +49,8 @@ import com.google.zxing.MultiFormatReader;
 import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
-import com.google.zxing.integration.android.IntentIntegrator;
+import com.journeyapps.barcodescanner.ScanContract;
+import com.journeyapps.barcodescanner.ScanOptions;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -70,7 +71,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class QrScannerFragment extends Fragment {
     private static final String TAG = "QRCodeFragment";
-    private static final String ScanResultExtra = "SCAN_RESULT";
     final DecimalFormat formatter = new DecimalFormat("#,###,###.00");
 
     private QrScannerViewModel qrScannerViewModel;
@@ -78,20 +78,16 @@ public class QrScannerFragment extends Fragment {
     private List<CategoryView> allCategories = new ArrayList<>();
     private TimePickerFragment timePicker;
     private DatePickerFragment datePicker;
-    private final ActivityResultLauncher<Intent> getQRResult = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                    Intent intent = result.getData();
-                    if (intent != null) {
-                        String data = intent.getStringExtra(ScanResultExtra);
-                        Log.i(TAG, "Scanned: " + data);
-                        PurchaseDTO purchaseDTO = new PurchaseDTO(data);
-                        qrScannerViewModel.validatePurchaseView(purchaseDTO, this::onInvalidPurchase);
-                        fillQRForm(purchaseDTO);
-                    } else {
-                        Log.i(TAG, "QR scan Cancelled");
-                    }
+    private final ActivityResultLauncher<ScanOptions> getQRResult = registerForActivityResult(
+            new ScanContract(), result -> {
+                if (result.getContents() != null) {
+                    String data = result.getContents();
+                    Log.i(TAG, "Scanned: " + data);
+                    PurchaseDTO purchaseDTO = new PurchaseDTO(data);
+                    qrScannerViewModel.validatePurchaseView(purchaseDTO, this::onInvalidPurchase);
+                    fillQRForm(purchaseDTO);
+                } else {
+                    Log.i(TAG, "QR scan Cancelled");
                 }
             });
     private final ActivityResultLauncher<Intent> openGalleryRequest = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
@@ -126,14 +122,6 @@ public class QrScannerFragment extends Fragment {
         qrScannerViewModel = new ViewModelProvider(this).get(QrScannerViewModel.class);
         binding = FragmentQrBinding.inflate(inflater, container, false);
         initQRForm(inflater);
-//        mAdView = new AdView(getContext());
-//        mAdView.setAdSize(getCurrentOrientationAnchoredAdaptiveBannerAdSize(getContext(), R.id.adView));
-//        mAdView.setAdUnitId("myAdUnitId");
-//        AdRequest adRequest = new AdRequest.Builder().setRequestAgent("android_studio:ad_template").build();
-//
-//        // Start loading the ad.
-//        mAdView.loadAd(adRequest);
-//        binding.adView.addView(mAdView);
 
         new Thread(() -> {
             allCategories = qrScannerViewModel.getAllCategories();
@@ -348,16 +336,13 @@ public class QrScannerFragment extends Fragment {
 
     private void initQRCodeScanner() {
         Log.i(TAG, "initQRCodeScanner: STARTED");
-//        todo: migrate to ScanContract
-        IntentIntegrator integrator = IntentIntegrator.forSupportFragment(this);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
-        integrator.setOrientationLocked(true);
-        integrator.setBarcodeImageEnabled(true);
-        integrator.setCaptureActivity(CaptureActivityPortrait.class);
-        integrator.setPrompt("Scan the QR code from a bill");
-        Intent scanIntent = integrator.createScanIntent();
-        getQRResult.launch(scanIntent);
-        integrator.initiateScan();
+        ScanOptions scanOptions = new ScanOptions();
+        scanOptions.setDesiredBarcodeFormats(ScanOptions.QR_CODE);
+        scanOptions.setOrientationLocked(true);
+        scanOptions.setBarcodeImageEnabled(true);
+        scanOptions.setCaptureActivity(CaptureActivityPortrait.class);
+        scanOptions.setPrompt(getString(R.string.scan_the_qr));
+        getQRResult.launch(scanOptions);
     }
 
 

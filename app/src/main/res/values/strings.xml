@@ -317,4 +317,5 @@ Here you can:\n
     <string name="update_available">A new update is available!</string>
     <string name="update_available_description">A new version is available, %s would you like to download it now?</string>
     <string name="download">Download</string>
+    <string name="scan_the_qr">Scan the QR code from a bill</string>
 </resources>
