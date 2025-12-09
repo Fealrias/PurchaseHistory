@@ -175,8 +175,6 @@ TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
 
 END OF TERMS AND CONDITIONS
 
-APPENDIX: How to apply the Apache License to your work.
-
 Copyright 2025 Fealrias
 
 Licensed under the Apache License, Version 2.0 (the "License");
