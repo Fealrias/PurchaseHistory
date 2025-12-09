@@ -2,8 +2,6 @@ package com.angelp.purchasehistory;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -17,10 +15,10 @@ import com.angelp.purchasehistory.ui.login.LoginActivity;
 import com.angelp.purchasehistory.ui.register.RegisterActivity;
 import com.angelp.purchasehistory.ui.spectator.SpectatorHomeActivity;
 import com.angelp.purchasehistory.web.clients.AuthClient;
+import com.angelp.purchasehistory.web.clients.VersionUpdater;
 import com.angelp.purchasehistory.web.clients.WebException;
 import com.angelp.purchasehistorybackend.models.enums.UserRole;
 import com.angelp.purchasehistorybackend.models.views.outgoing.UserView;
-import com.supersuman.apkupdater.ApkUpdater;
 
 import java.util.Optional;
 
@@ -33,44 +31,18 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class MainActivity extends AppCompatActivity {
     @Inject
     AuthClient authClient;
+    @Inject
+    VersionUpdater versionUpdater;
     private ActivityMainBinding binding;
-
-    private static final String REPO_URL = "https://github.com/Fealrias/PurchaseHistory/releases/latest";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         binding.loginButton.setOnClickListener(this::startLoginActivity);
         binding.registerButton.setOnClickListener(this::startRegisterActivity);
-        updateIfAvailable();
-    }
-
-
-    private void updateIfAvailable() {
-        new Thread(() -> {
-            ApkUpdater updater = new ApkUpdater(this, REPO_URL);
-            updater.setThreeNumbers(true);
-            Boolean newUpdateAvailable = updater.isNewUpdateAvailable();
-            if (newUpdateAvailable != null && newUpdateAvailable) {
-                new Handler(Looper.getMainLooper()).post(() -> {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.BaseDialogStyle);
-                    builder.setTitle(R.string.update_available);
-                    builder.setMessage(R.string.update_available_description);
-                    builder.setPositiveButton(R.string.download, (dialog, which) -> {
-                        updater.requestDownload();
-                        redirectIfJwtValid();
-                    });
-                    builder.setNegativeButton(R.string.cancel, (d, w) -> d.dismiss());
-                    builder.setOnDismissListener((d) -> redirectIfJwtValid());
-                    builder.show();
-                });
-            } else {
-                redirectIfJwtValid();
-            }
-        }).start();
+        versionUpdater.checkForUpdate(this, ()-> runOnUiThread(this::redirectIfJwtValid));
     }
 
     private void redirectIfJwtValid() {
@@ -79,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         String token = root.getUserToken().getValue();
         Log.i("jwtoken", token != null && !token.isEmpty() ? "Found JWT" : "No JWT in phone");
         if (token != null && !token.isEmpty()) {
-            binding.loadingMain.setVisibility(View.VISIBLE);
+            runOnUiThread(() -> binding.loadingMain.setVisibility(View.VISIBLE));
             new Thread(() -> {
                 Optional<UserView> loggedUser = Optional.ofNullable(PurchaseHistoryApplication.getInstance().getLoggedUser().getValue());
                 try {
