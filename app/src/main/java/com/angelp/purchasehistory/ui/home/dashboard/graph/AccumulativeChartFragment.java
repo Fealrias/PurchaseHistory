@@ -12,9 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
+
 import com.angelp.purchasehistory.R;
 import com.angelp.purchasehistory.data.AppColorCollection;
 import com.angelp.purchasehistory.data.Constants;
@@ -36,10 +38,9 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import dagger.hilt.android.AndroidEntryPoint;
+
 import org.jetbrains.annotations.NotNull;
 
-import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
@@ -48,6 +49,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class AccumulativeChartFragment extends RefreshablePurchaseFragment implements OnChartValueSelectedListener {
@@ -101,7 +106,7 @@ public class AccumulativeChartFragment extends RefreshablePurchaseFragment imple
         }
         binding.editLimitButton.setOnClickListener((v) -> {
             Intent intent = new Intent(getContext(), SettingsActivity.class);
-            intent.putExtra("fragment_name", "MonthlyLimitSettingsFragment");
+            intent.putExtra(Constants.Arguments.ACTIVITY_NAVIGATE_TO, Constants.SettingsLocations.EDIT_MONTHLY_LIMIT);
             startActivity(intent);
         });
         setData(filterViewModel.getFilterValue());

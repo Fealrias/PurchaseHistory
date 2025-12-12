@@ -198,16 +198,28 @@
 
 
         <Button
-            android:id="@+id/settings_button"
+            android:id="@+id/edit_category_button"
             android:layout_width="0dp"
             style="@style/Bordered"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:text="@string/edit_categories"
+            android:drawableStart="@drawable/list"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/user_info_card" />
+
+        <Button
+            android:id="@+id/settings_button"
+            android:layout_width="0dp"
+            style="@style/Bordered"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="@string/application_settings"
             android:drawableStart="@drawable/settings"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/user_info_card" />
+            app:layout_constraintTop_toBottomOf="@+id/edit_category_button" />
 
         <Button
             style="@style/Bordered"

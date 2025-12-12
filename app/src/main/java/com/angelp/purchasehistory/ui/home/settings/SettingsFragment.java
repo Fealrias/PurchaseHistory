@@ -4,19 +4,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+
 import com.angelp.purchasehistory.R;
 import com.angelp.purchasehistory.data.Constants;
 import com.angelp.purchasehistory.ui.feedback.FeedbackActivity;
 import com.angelp.purchasehistory.ui.legal.AboutUsActivity;
 import com.angelp.purchasehistory.web.clients.PurchaseClient;
 import com.angelp.purchasehistory.web.clients.UserClient;
-import dagger.hilt.android.AndroidEntryPoint;
 
 import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class SettingsFragment extends PreferenceFragmentCompat {
@@ -34,8 +37,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     private void loadAppSettings() {
-        Preference editCategoryPreference = findPreference("edit_category_preference");
-        editCategoryPreference.setOnPreferenceClickListener(p1 -> navigate(CategorySettingsFragment.class));
         SharedPreferences appPreferences = getContext().getSharedPreferences(Constants.Preferences.APP_PREFERENCES, Context.MODE_PRIVATE);
         String preferredCurrency = appPreferences.getString(Constants.Preferences.PREFERRED_CURRENCY, "");
         Preference creditsPreference = findPreference("credits_preference");

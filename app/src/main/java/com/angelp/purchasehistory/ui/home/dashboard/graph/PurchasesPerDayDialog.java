@@ -111,12 +111,12 @@ public class PurchasesPerDayDialog extends DialogFragment {
             List<PurchaseView> purchases = purchaseListView.getContent();
             purchasesAdapter = new PurchasesAdapter(purchases, getActivity());
             String sum = AndroidUtils.formatCurrency(purchaseListView.getTotalSum(), getActivity());
-            binding.message.setText(getString(R.string.total_sum, sum));
             setupShowMoreButton(purchases.size(), maxSize);
             LinearLayoutManager llm = new LinearLayoutManager(getContext());
             llm.setOrientation(LinearLayoutManager.VERTICAL);
             new Handler(Looper.getMainLooper()).post(() -> {
                 if (binding != null) {
+                    binding.message.setText(getString(R.string.total_sum, sum));
                     binding.purchaseList.setLayoutManager(llm);
                     binding.purchaseList.setItemAnimator(new DefaultItemAnimator());
                     binding.purchaseList.setAdapter(purchasesAdapter);

@@ -1,6 +1,7 @@
 package com.angelp.purchasehistory.web.clients;
 
 import android.util.Log;
+
 import com.angelp.purchasehistory.PurchaseHistoryApplication;
 import com.angelp.purchasehistory.data.filters.PageRequest;
 import com.angelp.purchasehistory.web.LocalDateGsonAdapter;
@@ -8,11 +9,17 @@ import com.angelp.purchasehistory.web.WebUtils;
 import com.angelp.purchasehistory.web.interceptors.AuthInterceptor;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import okhttp3.*;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class HttpClient {
     public static final String PORT = ":8080"; //8080: PROD, 9000:DEV

@@ -63,8 +63,7 @@
         <item name="android:background">@drawable/bordered_bg</item>
     </style>
     <style name="AppCardView">
-        <item name="elevation">5dp</item>
+        <item name="elevation">8dp</item>
         <item name="android:background">@drawable/bordered_bg</item>
-        <item name="android:backgroundTint">@color/surfaceA10</item>
     </style>
 </resources>

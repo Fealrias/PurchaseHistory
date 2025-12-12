@@ -12,25 +12,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
+
 import com.angelp.purchasehistory.R;
 import com.angelp.purchasehistory.data.model.Category;
 import com.angelp.purchasehistory.databinding.CategoryDialogBinding;
 import com.angelp.purchasehistory.util.AfterTextChangedWatcher;
 import com.angelp.purchasehistory.util.AndroidUtils;
 import com.angelp.purchasehistory.web.clients.PurchaseClient;
+import com.angelp.purchasehistory.web.clients.WebException;
 import com.angelp.purchasehistorybackend.models.views.incoming.CategoryDTO;
 import com.angelp.purchasehistorybackend.models.views.outgoing.CategoryView;
-import dagger.hilt.android.AndroidEntryPoint;
+
 import org.jetbrains.annotations.NotNull;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class EditCategoryDialog extends DialogFragment {
@@ -94,11 +100,15 @@ public class EditCategoryDialog extends DialogFragment {
             boolean isValid = AndroidUtils.validateCategoryValues(binding.categoryNameInput, binding.categoryColorInput);
             if (isValid) {
                 new Thread(() -> {
-                    Category category = purchaseClient.editCategory(categoryId.intValue(), new CategoryDTO(name, color));
-                    defaultValue.setColor(category.getColor());
-                    defaultValue.setName(category.getName());
-                    consumer.accept(category);
-                    dismiss();
+                    try {
+                        Category category = purchaseClient.editCategory(categoryId.intValue(), new CategoryDTO(name, color));
+                        defaultValue.setColor(category.getColor());
+                        defaultValue.setName(category.getName());
+                        consumer.accept(category);
+                        dismiss();
+                    } catch (WebException e) {
+                        new Handler(Looper.getMainLooper()).post(() -> binding.categoryErrorText.setText(e.getErrorResource()));
+                    }
                 }).start();
             }
         });

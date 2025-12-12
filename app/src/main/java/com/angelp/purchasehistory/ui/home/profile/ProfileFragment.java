@@ -79,17 +79,21 @@ public class ProfileFragment extends Fragment {
         // Set up button click listeners
         NavController navController = NavHostFragment.findNavController(this);
         binding.editButton.setOnClickListener(v -> {
-                    if (navController.getCurrentDestination() !=null && navController.getCurrentDestination().getId() == R.id.navigation_profile)
+                    if (navController.getCurrentDestination() != null && navController.getCurrentDestination().getId() == R.id.navigation_profile)
                         navController.navigate(R.id.action_navigation_profile_to_navigation_edit_profile);
                 }
         );
         // Set up button click listeners
         binding.btnChangePassword.setOnClickListener(v -> {
-            if (navController.getCurrentDestination() !=null && navController.getCurrentDestination().getId() == R.id.navigation_profile)
-                navController.navigate(R.id.action_navigation_profile_to_navigation_change_password);
+                    if (navController.getCurrentDestination() != null && navController.getCurrentDestination().getId() == R.id.navigation_profile)
+                        navController.navigate(R.id.action_navigation_profile_to_navigation_change_password);
                 }
         );
-
+        binding.editCategoryButton.setOnClickListener((v) -> {
+            Intent intent = new Intent(getActivity(), SettingsActivity.class);
+            intent.putExtra(Constants.Arguments.ACTIVITY_NAVIGATE_TO, Constants.SettingsLocations.EDIT_CATEGORY);
+            startActivity(intent);
+        });
         binding.downloadSvgButton.setOnClickListener(v -> downloadUserData());
         binding.shareLinkButton.setOnClickListener(v -> shareToken());
         binding.logoutButton.setOnClickListener(v -> AndroidUtils.logout(v.getContext(), purchaseClient));

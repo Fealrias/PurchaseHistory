@@ -1,11 +1,13 @@
 package com.angelp.purchasehistory.data;
 
 import android.content.Context;
+
 import com.angelp.purchasehistory.R;
 import com.angelp.purchasehistory.data.filters.PurchaseFilter;
 import com.angelp.purchasehistory.data.model.DashboardComponent;
 import com.angelp.purchasehistory.data.tour.TourStep;
 import com.angelp.purchasehistorybackend.models.views.outgoing.CategoryView;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
@@ -50,6 +52,7 @@ public final class Constants {
         errorsMap.put("1011", R.string.err1011);
         errorsMap.put("1012", R.string.err1012);
         errorsMap.put("1013", R.string.err1013);
+        errorsMap.put("1014", R.string.err1014);
     }
 
     public static PurchaseFilter getDefaultFilter() {
@@ -80,6 +83,11 @@ public final class Constants {
         String VIEW_ID = "viewId";
         String ARG_COMPONENT = "component";
         String DASHBOARD_FILTER = "dashboard_filter";
+        String ACTIVITY_NAVIGATE_TO = "fragment_name";
+    }
+    public interface SettingsLocations {
+        String EDIT_CATEGORY = "edit_category";
+        String EDIT_MONTHLY_LIMIT = "edit_monthly_limit";
     }
     @NotNull
     public static CategoryView getDefaultCategory(Context context) {
