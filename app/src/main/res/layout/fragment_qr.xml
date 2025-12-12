@@ -74,7 +74,7 @@
             android:layout_width="50dp"
             android:layout_height="48dp"
             android:layout_gravity="end|center"
-            android:layout_marginEnd="60dp"
+            android:layout_marginEnd="40dp"
             android:contentDescription="@string/qr_open_camera_button_hint"
             android:src="@drawable/image"/>
 
@@ -84,7 +84,7 @@
             android:layout_width="50dp"
             android:layout_height="48dp"
             android:layout_gravity="end|center"
-            android:layout_marginEnd="120dp"
+            android:layout_marginEnd="100dp"
             android:contentDescription="@string/qr_open_camera_button_hint"
             android:src="@drawable/qr" />
     </FrameLayout>

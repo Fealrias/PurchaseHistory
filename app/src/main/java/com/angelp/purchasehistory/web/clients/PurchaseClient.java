@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.storage.StorageManager;
 import android.util.Log;
+
 import com.angelp.purchasehistory.PurchaseHistoryApplication;
 import com.angelp.purchasehistory.R;
 import com.angelp.purchasehistory.data.filters.PurchaseFilter;
@@ -19,19 +20,26 @@ import com.angelp.purchasehistorybackend.models.views.outgoing.analytics.Categor
 import com.angelp.purchasehistorybackend.models.views.outgoing.analytics.PurchaseListView;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import org.jetbrains.annotations.NotNull;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Singleton
 public class PurchaseClient extends HttpClient {
@@ -215,13 +223,7 @@ public class PurchaseClient extends HttpClient {
 
     public Category createCategory(CategoryDTO categoryDTO) {
         try (Response res = post(BACKEND_URL + "/category", categoryDTO)) {
-            ResponseBody body = res.body();
-            if (res.isSuccessful() && body != null) {
-                String json = body.string();
-                body.close();
-                Log.d("httpResponse", "Created Category: " + json);
-                return gson.fromJson(json, Category.class);
-            } else throw new IOException("Failed to create category");
+            return utils.getBody(res, Category.class);
         } catch (IOException ignored) {
         } finally {
             cleanCache(BACKEND_URL + "/category");
@@ -231,13 +233,7 @@ public class PurchaseClient extends HttpClient {
 
     public Category editCategory(int id, CategoryDTO categoryDTO) {
         try (Response res = put(BACKEND_URL + "/category/" + id, categoryDTO)) {
-            ResponseBody body = res.body();
-            if (res.isSuccessful() && body != null) {
-                String json = body.string();
-                body.close();
-                Log.d("httpResponse", "Edited Category: " + json);
-                return gson.fromJson(json, Category.class);
-            } else throw new IOException("Failed to edit category");
+            return utils.getBody(res, Category.class);
         } catch (IOException ignored) {
         } finally {
             cleanCache();

@@ -8,6 +8,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import com.angelp.purchasehistory.R;
+import com.angelp.purchasehistory.data.Constants;
 import com.angelp.purchasehistory.databinding.ActivitySettingsBinding;
 import com.angelp.purchasehistory.ui.home.HomeActivity;
 import dagger.hilt.android.AndroidEntryPoint;
@@ -20,6 +21,7 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
         binding = ActivitySettingsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         ActionBar actionBar = getSupportActionBar();
@@ -28,10 +30,14 @@ public class SettingsActivity extends AppCompatActivity {
             actionBar.setIcon(R.drawable.arrow_turn_left);
         }
         if (savedInstanceState == null) {
-            String fragmentName = getIntent().getStringExtra("fragment_name");
-            if ("MonthlyLimitSettingsFragment".equals(fragmentName)) {
+            String fragmentName = intent.getStringExtra("fragment_name");
+            if (Constants.SettingsLocations.EDIT_MONTHLY_LIMIT.equals(fragmentName)) {
                 getSupportFragmentManager().beginTransaction()
                         .replace(binding.settingsContainer.getId(), new MonthlyLimitSettingsFragment())
+                        .commit();
+            } else if (Constants.SettingsLocations.EDIT_CATEGORY.equals(fragmentName)) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(binding.settingsContainer.getId(), new CategorySettingsFragment())
                         .commit();
             } else {
                 getSupportFragmentManager()

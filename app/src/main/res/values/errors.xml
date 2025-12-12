@@ -13,5 +13,6 @@
     <string name="err1011">Invalid password</string>
     <string name="err1012">User with the same username or email already exists.</string>
     <string name="err1013">Error during reCaptcha process</string>
+    <string name="err1014">Category with the same name already exists</string>
     <string name="error_web_response">An error occurred. Please try again later.</string>
 </resources>
