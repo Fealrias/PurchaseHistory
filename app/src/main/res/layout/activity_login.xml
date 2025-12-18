@@ -95,7 +95,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/backButton" />
+        app:layout_constraintTop_toBottomOf="@+id/google_sign_in_button" />
 
     <ImageView
         android:id="@+id/imageView3"
@@ -107,13 +107,12 @@
         app:srcCompat="@mipmap/ic_launcher_foreground"
         android:contentDescription="@string/logo" />
 
-    <!--    <com.google.android.gms.common.SignInButton
-            android:visibility="gone"
+        <com.google.android.gms.common.SignInButton
             android:id="@+id/google_sign_in_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/forgotPasswordButton" />-->
+            app:layout_constraintTop_toBottomOf="@+id/login_loginButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>

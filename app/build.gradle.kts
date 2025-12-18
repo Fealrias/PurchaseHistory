@@ -65,9 +65,15 @@ dependencies {
     implementation(files("libs/OutgoingViews_PurchaseHistory.jar-0.7.0-plain.jar"))
 //    auto update
     implementation("com.github.javiersantos:AppUpdater:2.7")
+
+//    GCLOUD Services
     //captcha
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
     implementation("com.google.android.recaptcha:recaptcha:18.8.0")
+    // Login with Gmail
+    implementation("androidx.credentials:credentials:1.6.0-rc01")
+    implementation("androidx.credentials:credentials-play-services-auth:1.6.0-rc01")
+    implementation("com.google.android.libraries.identity.googleid:googleid:<latest version>")
 
 //    QR reading
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")

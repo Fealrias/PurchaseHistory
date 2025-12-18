@@ -25,7 +25,9 @@ import com.angelp.purchasehistory.ui.home.HomeActivity;
 import com.angelp.purchasehistory.util.AfterTextChangedWatcher;
 import com.angelp.purchasehistory.util.AndroidUtils;
 import com.angelp.purchasehistory.web.clients.ScheduledExpenseClient;
+import com.angelp.purchasehistory.web.gcloud.GCloudService.GCloudService;
 import com.angelp.purchasehistorybackend.models.views.outgoing.ScheduledExpenseView;
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption;
 
 import java.util.List;
 
@@ -40,7 +42,8 @@ public class LoginActivity extends AppCompatActivity {
     private LoginViewModel loginViewModel;
     @Inject
     ScheduledExpenseClient scheduledExpenseClient;
-
+    @Inject
+    GCloudService gCloudService;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -100,7 +103,11 @@ public class LoginActivity extends AppCompatActivity {
                 onFormChange();
             }
         });
-//        binding.googleSignInButton.setOnClickListener((v)-> loginWithGoogle());
+        binding.googleSignInButton.setOnClickListener((v)-> loginWithGoogle());
+    }
+
+    private void loginWithGoogle() {
+
     }
 
 
