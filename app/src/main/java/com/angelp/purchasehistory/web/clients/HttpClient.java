@@ -22,9 +22,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class HttpClient {
-    public static final String PORT = ":8080"; //8080: PROD, 9000:DEV
-    public static final String HOST_NAME = "https://angelp-home.zapto.org";
-    public static final String BACKEND_URL = HOST_NAME + PORT + "/api";
+    public static final String HOST_NAME = "https://purchase-history.fealrias.com";
+    public static final String BACKEND_URL = HOST_NAME + "/api";
     protected final OkHttpClient client;
     protected final AuthInterceptor authInterceptor = new AuthInterceptor();
     protected final Gson gson = new GsonBuilder()
