@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
         binding.registerButton.setOnClickListener(this::startRegisterActivity);
         versionUpdater.checkForUpdate(this, ()-> runOnUiThread(this::redirectIfJwtValid));
     }
-
     private void redirectIfJwtValid() {
         PurchaseHistoryApplication root = PurchaseHistoryApplication.getInstance();
 

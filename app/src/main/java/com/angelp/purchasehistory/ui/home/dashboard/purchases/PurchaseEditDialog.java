@@ -1,5 +1,6 @@
 package com.angelp.purchasehistory.ui.home.dashboard.purchases;
 
+import static com.angelp.purchasehistory.data.Constants.Arguments.PURCHASE_EDIT_DIALOG_CONTENT_KEY;
 import static com.angelp.purchasehistory.data.Constants.Arguments.PURCHASE_EDIT_DIALOG_ID_KEY;
 
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,7 +24,9 @@ import com.angelp.purchasehistory.R;
 import com.angelp.purchasehistory.components.form.CreateCategoryDialog;
 import com.angelp.purchasehistory.components.form.DatePickerFragment;
 import com.angelp.purchasehistory.components.form.TimePickerFragment;
+import com.angelp.purchasehistory.data.Constants;
 import com.angelp.purchasehistory.data.filters.PurchaseFilterSingleton;
+import com.angelp.purchasehistory.data.model.parcel.PurchaseParcel;
 import com.angelp.purchasehistory.databinding.FragmentPurchaseEditDialogBinding;
 import com.angelp.purchasehistory.ui.home.qr.CategorySpinnerAdapter;
 import com.angelp.purchasehistory.util.AfterTextChangedWatcher;
@@ -80,6 +84,7 @@ public class PurchaseEditDialog extends DialogFragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             this.purchaseId = bundle.getLong(PURCHASE_EDIT_DIALOG_ID_KEY, 0L);
+            this.purchase = bundle.getParcelable(PURCHASE_EDIT_DIALOG_CONTENT_KEY);
             binding.title.dialogTitle.setText(getString(R.string.edit_purchase_id, purchaseId.toString()));
         }
         timePicker = new TimePickerFragment(purchase.getTime());
@@ -145,6 +150,17 @@ public class PurchaseEditDialog extends DialogFragment {
                 }
             }
         });
+        binding.purchaseEditCurrencySpinner.setAdapter(new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, Constants.CURRENCY_LIST));
+        binding.purchaseEditCurrencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                purchase.setCurrency(Constants.CURRENCY_LIST.get(i));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
         binding.purchaseEditCategorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -170,7 +186,7 @@ public class PurchaseEditDialog extends DialogFragment {
     }
 
     private void fillEditForm(PurchaseDTO view) {
-        new Thread(() -> {
+        new Handler(Looper.getMainLooper()).post(() -> {
             if (view.getPrice() != null)
                 binding.purchaseEditPriceInput.setText(String.format(view.getPrice().toString()));
             if (view.getTimestamp() != null) {
@@ -191,7 +207,10 @@ public class PurchaseEditDialog extends DialogFragment {
                     }
                 }
             }
-        }).start();
+            if (view.getCurrency() != null) {
+                binding.purchaseEditCurrencySpinner.setSelection(Constants.CURRENCY_LIST.indexOf(purchase.getCurrency()));
+            }
+        });
 
     }
 
@@ -219,13 +238,14 @@ public class PurchaseEditDialog extends DialogFragment {
     }
 
     private void resetForm() {
-        this.purchase = new PurchaseDTO();
-        this.purchaseId = null;
-        binding.purchaseEditCategorySpinner.setSelection(0);
-        binding.purchaseEditPriceInput.getText().clear();
-        binding.purchaseEditNoteInput.getText().clear();
-        binding.purchaseEditDateInput.setText(R.string.date);
-        binding.purchaseEditTimeInput.setText(R.string.time);
+        Bundle arguments = getArguments();
+        if(arguments!=null){
+            this.purchase = arguments.getParcelable(Constants.Arguments.PURCHASE_EDIT_DIALOG_CONTENT_KEY);
+            this.purchaseId = arguments.getLong(PURCHASE_EDIT_DIALOG_ID_KEY);
+        } else {
+            this.purchase = new PurchaseParcel();
+        }
+        fillEditForm(this.purchase);
     }
 
     @Override

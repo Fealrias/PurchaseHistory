@@ -1,21 +1,25 @@
 package com.angelp.purchasehistory.ui.home.qr;
 
 import androidx.lifecycle.ViewModel;
+
 import com.angelp.purchasehistory.PurchaseHistoryApplication;
+import com.angelp.purchasehistory.data.Constants;
 import com.angelp.purchasehistory.web.clients.PurchaseClient;
 import com.angelp.purchasehistory.web.clients.WebException;
 import com.angelp.purchasehistorybackend.models.views.incoming.PurchaseDTO;
 import com.angelp.purchasehistorybackend.models.views.outgoing.CategoryView;
 import com.angelp.purchasehistorybackend.models.views.outgoing.PurchaseView;
-import dagger.hilt.android.lifecycle.HiltViewModel;
-import lombok.Getter;
 
-import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
+import lombok.Getter;
 
 @HiltViewModel
 public class QrScannerViewModel extends ViewModel {
@@ -54,6 +58,7 @@ public class QrScannerViewModel extends ViewModel {
 
 
     public void updatePurchaseDTO(PurchaseDTO newData) {
+        if (newData.getCurrency() != null) purchaseDTO.setCurrency(newData.getCurrency());
         if (newData.getQrContent() != null) purchaseDTO.setQrContent(newData.getQrContent());
         if (newData.getPrice() != null) purchaseDTO.setPrice(newData.getPrice());
         if (newData.getTimestamp() != null) purchaseDTO.setTimestamp(newData.getTimestamp());
@@ -66,6 +71,7 @@ public class QrScannerViewModel extends ViewModel {
     public void resetPurchaseDto() {
         purchaseDTO.setQrContent(null);
         purchaseDTO.setPrice(BigDecimal.ZERO);
+        purchaseDTO.setCurrency(Constants.CURRENCY.EUR);
         purchaseDTO.setTimestamp(LocalDateTime.now());
         purchaseDTO.setCategoryId(null);
         purchaseDTO.setBillId(null);

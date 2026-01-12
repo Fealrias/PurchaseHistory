@@ -51,10 +51,18 @@
         <item name="android:textColor">@color/text</item>
         <item name="android:background">@drawable/bordered_dropdown_bg</item>
         <item name="android:foreground">?attr/selectableItemBackground</item>
-        <item name="android:paddingEnd">46dp</item>
+        <item name="android:paddingEnd">42dp</item>
         <item name="android:ellipsize">end</item>
         <item name="maxLines">1</item>
         
+    </style>
+    <style name="CurrencyDropdown" parent="Widget.AppCompat.Spinner">
+        <item name="android:textColor">@color/text</item>
+        <item name="android:background">@drawable/bordered_bg</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="maxLines">1</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_width">80dp</item>
     </style>
     <style name="App_MaterialCalendar_Theme" parent="ThemeOverlay.Material3.MaterialCalendar">
         <item name="android:background">@drawable/bordered_bg</item>

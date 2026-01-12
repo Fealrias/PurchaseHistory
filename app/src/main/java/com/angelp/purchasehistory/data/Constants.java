@@ -20,6 +20,12 @@ public final class Constants {
     public final static List<DashboardComponent> DEFAULT_COMPONENTS = new ArrayList<>();
     public static final List<TourStep> tourSteps = new ArrayList<>();
     public static final HashMap<String, Integer> errorsMap = new HashMap<>();
+    public interface CURRENCY {
+        String BGN= "BGN";
+        String EUR = "EUR";
+    }
+
+    public static final List<String> CURRENCY_LIST = List.of(CURRENCY.EUR,CURRENCY.BGN);
 
     static {
         DEFAULT_COMPONENTS.add(new DashboardComponent("PieChartFragment"));
@@ -68,11 +74,12 @@ public final class Constants {
         String DASHBOARD_PREFS = "dashboard_prefs";
         String APP_PREFERENCES = "app_preferences";
         String SILENCED_NOTIFICATIONS = "silenced_notifications";
-        String PREFERRED_CURRENCY = "preferred_currency";
+        String PREFERRED_LANGUAGE = "language";
     }
 
     public interface Arguments {
         String PURCHASE_EDIT_DIALOG_ID_KEY = "purchaseId";
+        String PURCHASE_EDIT_DIALOG_CONTENT_KEY = "purchaseContent";
         String ARG_SHOW_FILTER = "show_filter";
         String NOTIFICATION_EXTRA_ARG = "scheduledNotifications";
         String ARG_MAX_SIZE = "max_size";

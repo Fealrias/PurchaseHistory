@@ -37,12 +37,13 @@
         android:id="@+id/filter_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="10dp"
         style="@style/Primary"
         android:drawableStart="@drawable/ic_menu_filter"
-        android:paddingStart="10dp"
+        android:drawablePadding="4dp"
         android:layout_weight="1"
-        android:textSize="14sp"
         android:maxLines="1"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="8sp"
+        android:autoSizeMaxTextSize="16sp"
         android:text="@string/filterButton" />
 </LinearLayout>

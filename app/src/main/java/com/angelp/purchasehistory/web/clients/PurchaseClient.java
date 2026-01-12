@@ -81,7 +81,7 @@ public class PurchaseClient extends HttpClient {
             return utils.getBody(res, PurchaseView.class);
         } catch (IOException ignored) {
         } finally {
-            cleanCache(BACKEND_URL + "/purchase");
+            cleanCache(BACKEND_URL + "/purchase", BACKEND_URL + "/category/analytics");
         }
         return null;
     }
@@ -105,7 +105,7 @@ public class PurchaseClient extends HttpClient {
             } else throw new IOException("Failed to edit purchase");
         } catch (IOException ignored) {
         } finally {
-            cleanCache(BACKEND_URL + "/purchase");
+            cleanCache(BACKEND_URL + "/purchase", BACKEND_URL + "/category/analytics");
         }
         return null;
     }
@@ -255,11 +255,11 @@ public class PurchaseClient extends HttpClient {
         }
     }
 
-    public void getExportedCsv(Context context, Uri saveLocation) {
+    public boolean getExportedCsv(Context context, Uri saveLocation) {
         try (Response res = get(BACKEND_URL + "/purchase/export")) {
             ResponseBody body = res.body();
             if (res.isSuccessful() && body != null) {
-                createFile(context, body.bytes(), saveLocation);
+                return createFile(context, body.bytes(), saveLocation);
             } else {
                 if (body != null) {
                     ErrorResponse errorResponse = gson.fromJson(body.string(), ErrorResponse.class);
@@ -272,14 +272,16 @@ public class PurchaseClient extends HttpClient {
         } catch (IOException e) {
             Log.e(TAG, "Error downloading CSV: " + e.getMessage());
         }
+        return false;
     }
 
-    private void createFile(Context context, byte[] bytes, Uri location) {
+    private boolean createFile(Context context, byte[] bytes, Uri location) {
         if (location != null) {
             try (OutputStream outputStream = context.getContentResolver().openOutputStream(location)) {
                 if (outputStream != null) {
                     outputStream.write(bytes);
                     Log.i(TAG, "CSV file saved successfully: " + location.getPath());
+                    return true;
                 } else {
                     Log.e(TAG, "OutputStream is null");
                 }
@@ -289,6 +291,7 @@ public class PurchaseClient extends HttpClient {
         } else {
             Log.e(TAG, "Failed to create file URI");
         }
+        return false;
     }
 
     public CategoryAnalyticsReport getCategoryAnalyticsReport(PurchaseFilter filter) {
@@ -338,13 +341,17 @@ public class PurchaseClient extends HttpClient {
             Log.e(TAG, "cleanCache: ", e);
         }
     }
-    public void cleanCache(String url){
+    public void cleanCache(String... url){
         try {
             Iterator<String> urlIterator = cache.urls();
             while (urlIterator.hasNext()) {
-                if (urlIterator.next().startsWith(url)) {
-                    urlIterator.remove();
+                String next = urlIterator.next();
+                for (String s : url) {
+                    if (next.startsWith(s)) {
+                        urlIterator.remove();
+                    }
                 }
+
             }
             Log.i(TAG, "cleanCache:"+url+" SUCCESS");
         } catch (IOException e) {

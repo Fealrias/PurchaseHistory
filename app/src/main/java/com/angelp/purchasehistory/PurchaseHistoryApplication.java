@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.widget.Toast;
 import androidx.lifecycle.MutableLiveData;
+
+import com.angelp.purchasehistory.data.Constants;
+import com.angelp.purchasehistory.util.AndroidUtils;
 import com.angelp.purchasehistorybackend.models.views.outgoing.UserView;
 import dagger.hilt.android.HiltAndroidApp;
 import lombok.Getter;
@@ -26,10 +29,15 @@ public class PurchaseHistoryApplication extends Application {
     public void onCreate() {
         instance = this;
         super.onCreate();
+        applySavedLanguage();
         initializeJWT();
         Thread.setDefaultUncaughtExceptionHandler(new GlobalExceptionHandler(this));
     }
-
+    private void applySavedLanguage() {
+        SharedPreferences prefs = getSharedPreferences(Constants.Preferences.APP_PREFERENCES, Context.MODE_PRIVATE);
+        String languageCode = prefs.getString(Constants.Preferences.PREFERRED_LANGUAGE, "en");
+        AndroidUtils.setLocale(languageCode);
+    }
     private void initializeJWT() {
         SharedPreferences player = getContext().getSharedPreferences("player", MODE_PRIVATE);
         userToken.setValue(player.getString("jwt", null));

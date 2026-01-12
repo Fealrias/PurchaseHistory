@@ -1,5 +1,7 @@
 package com.angelp.purchasehistory.ui.home.scheduled;
 
+import static com.angelp.purchasehistory.util.AndroidUtils.SCHEDULED_PERIOD_LIST;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -13,9 +15,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+
 import com.angelp.purchasehistory.R;
 import com.angelp.purchasehistory.components.form.DatePickerFragment;
 import com.angelp.purchasehistory.components.form.TimePickerFragment;
@@ -31,10 +35,9 @@ import com.angelp.purchasehistorybackend.models.enums.ScheduledPeriod;
 import com.angelp.purchasehistorybackend.models.views.incoming.ScheduledExpenseDTO;
 import com.angelp.purchasehistorybackend.models.views.outgoing.CategoryView;
 import com.angelp.purchasehistorybackend.models.views.outgoing.ScheduledExpenseView;
-import dagger.hilt.android.AndroidEntryPoint;
+
 import org.jetbrains.annotations.NotNull;
 
-import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
@@ -44,7 +47,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static com.angelp.purchasehistory.util.AndroidUtils.SCHEDULED_PERIOD_LIST;
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class CreateScheduledExpenseDialog extends DialogFragment {
@@ -62,6 +67,7 @@ public class CreateScheduledExpenseDialog extends DialogFragment {
     private List<CategoryView> categoryOptions;
     private ScheduledExpenseView scheduledExpense = new ScheduledExpenseView();
     private ArrayAdapter<String> periodAdapter;
+    private ArrayAdapter<String> currencyAdapter;
 
 
     public CreateScheduledExpenseDialog(Consumer<ScheduledExpenseView> consumer) {
@@ -77,7 +83,9 @@ public class CreateScheduledExpenseDialog extends DialogFragment {
         LayoutInflater layoutInflater = getLayoutInflater();
         binding = DialogEditScheduledExpenseBinding.inflate(layoutInflater);
 
-        periodAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, SCHEDULED_PERIOD_LIST);
+        periodAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, SCHEDULED_PERIOD_LIST);
+        currencyAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, Constants.CURRENCY_LIST);
+
         setupDateTimePickers();
         setupCategoryAdapter();
         setupTextWatchers();
@@ -105,7 +113,6 @@ public class CreateScheduledExpenseDialog extends DialogFragment {
     }
 
 
-
     private void setupTextWatchers() {
         binding.editScheduledExpenseEditTextName.addTextChangedListener(new AfterTextChangedWatcher() {
             @Override
@@ -121,7 +128,8 @@ public class CreateScheduledExpenseDialog extends DialogFragment {
                     binding.editScheduledExpenseEditTextPrice.setError(getString(R.string.error_invalid_price));
                     binding.editScheduledExpenseSaveButton.setEnabled(false);
                 } else {
-                    if (current.trim().isEmpty()) scheduledExpense.setPrice(new BigDecimal(BigInteger.ZERO));
+                    if (current.trim().isEmpty())
+                        scheduledExpense.setPrice(new BigDecimal(BigInteger.ZERO));
                     else scheduledExpense.setPrice(new BigDecimal(current));
                     binding.editScheduledExpenseSaveButton.setEnabled(true);
                     binding.editScheduledExpenseEditTextPrice.setError(null);
@@ -150,6 +158,18 @@ public class CreateScheduledExpenseDialog extends DialogFragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 scheduledExpense.setPeriod(ScheduledPeriod.valueOf(periodAdapter.getItem(position)));
                 AndroidUtils.setNextTimestampString(binding.editScheduledExpenseTextViewNextDate, scheduledExpense);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+        binding.editScheduledExpenseSpinnerCurrency.setAdapter(currencyAdapter);
+        binding.editScheduledExpenseSpinnerCurrency.setSelection(Constants.CURRENCY_LIST.indexOf(scheduledExpense.getCurrency()));
+        binding.editScheduledExpenseSpinnerCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                scheduledExpense.setCurrency(Constants.CURRENCY_LIST.get(position));
             }
 
             @Override
@@ -194,7 +214,7 @@ public class CreateScheduledExpenseDialog extends DialogFragment {
     }
 
     private void onSubmit(DialogInterface dialog) {
-        if (scheduledExpense.getPrice() == null || BigDecimal.ZERO.compareTo(scheduledExpense.getPrice())>=0 || binding.editScheduledExpenseEditTextPrice.getText().toString().isBlank()) {
+        if (scheduledExpense.getPrice() == null || BigDecimal.ZERO.compareTo(scheduledExpense.getPrice()) >= 0 || binding.editScheduledExpenseEditTextPrice.getText().toString().isBlank()) {
             binding.editScheduledExpenseEditTextPrice.setError(getText(R.string.error_price_empty));
             return;
         }
@@ -211,6 +231,7 @@ public class CreateScheduledExpenseDialog extends DialogFragment {
                 dto.setPeriod(scheduledExpense.getPeriod());
                 dto.setNote(scheduledExpense.getNote());
                 dto.setEnabled(scheduledExpense.isEnabled());
+                dto.setCurrency(scheduledExpense.getCurrency());
                 ScheduledExpenseView newExpense = scheduledExpenseClient.createScheduledExpense(dto);
                 new Handler(Looper.getMainLooper()).post(() -> {
                     if (newExpense != null) {

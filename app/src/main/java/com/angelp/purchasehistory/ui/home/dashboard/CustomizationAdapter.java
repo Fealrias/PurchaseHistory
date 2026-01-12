@@ -4,17 +4,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.angelp.purchasehistory.R;
 import com.angelp.purchasehistory.data.model.DashboardComponent;
-import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import lombok.Getter;
 
 @Getter
 public class CustomizationAdapter extends RecyclerView.Adapter<CustomizationAdapter.ViewHolder> {
@@ -66,8 +69,8 @@ public class CustomizationAdapter extends RecyclerView.Adapter<CustomizationAdap
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        final AppCompatImageButton buttonDown;
-        final AppCompatImageButton buttonUp;
+        final ImageButton buttonDown;
+        final ImageButton buttonUp;
         final TextView fragmentName;
         final CheckBox displayCheckbox;
         final ImageView fragmentIcon;

@@ -48,7 +48,7 @@ public class SpectatorDashboardFragment extends Fragment {
     private void init() {
         new Thread(() -> {
             List<UserView> observedUsers = observerClient.getObservedUsers();
-            ArrayAdapter<UserView> observedUserAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, observedUsers);
+            ArrayAdapter<UserView> observedUserAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, observedUsers);
             binding.spectatorHomeUserSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

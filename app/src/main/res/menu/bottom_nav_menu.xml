@@ -11,7 +11,7 @@
         android:title="@string/title_scheduled_expenses" />
     <item
         android:id="@+id/navigation_qrscanner"
-        android:icon="@drawable/qr"
+        android:icon="@drawable/cashier"
         android:title="@string/title_activity_qrscanner" />
     <item
         android:id="@+id/navigation_profile"

@@ -1,6 +1,7 @@
 package com.angelp.purchasehistory.web.clients;
 
 import android.util.Log;
+
 import com.angelp.purchasehistory.PurchaseHistoryApplication;
 import com.angelp.purchasehistory.R;
 import com.angelp.purchasehistory.data.filters.PurchaseFilter;
@@ -9,15 +10,19 @@ import com.angelp.purchasehistorybackend.models.views.incoming.UpdatePasswordDTO
 import com.angelp.purchasehistorybackend.models.views.incoming.UserDTO;
 import com.angelp.purchasehistorybackend.models.views.outgoing.UserAnalytics;
 import com.angelp.purchasehistorybackend.models.views.outgoing.UserView;
-import okhttp3.Response;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.io.IOException;
 import java.util.Optional;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import okhttp3.Response;
+
 @Singleton
 public class UserClient extends HttpClient {
+    @Inject
+    PurchaseClient purchaseClient;
     @Inject
     public UserClient() {
     }
@@ -74,6 +79,18 @@ public class UserClient extends HttpClient {
         } catch (WebException e) {
             PurchaseHistoryApplication.getInstance().alert(R.string.failed);
             return new UserAnalytics();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public UserView updatePreferredCurrency(String value) {
+        try (Response res = put(BACKEND_URL + "/users/self/currency?val=" + value, null)) {
+            if (res.isSuccessful()) {
+                Log.i("CURRENCY", "updatePreferredCurrency: " + value);
+                purchaseClient.cleanCache(BACKEND_URL + "/purchase", BACKEND_URL + "/category/analytics");
+            }
+            return utils.getBody(res, UserView.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

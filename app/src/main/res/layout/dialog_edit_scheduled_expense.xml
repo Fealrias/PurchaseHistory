@@ -19,13 +19,6 @@
             android:orientation="horizontal"
             android:paddingBottom="8dp"
             android:layout_marginHorizontal="16dp">
-        <Spinner
-                android:id="@+id/edit_scheduled_expense_spinnerCategory"
-                style="@style/BorderedDropdown"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:minHeight="40dp"
-                android:layout_weight="1"/>
         <EditText
                 android:id="@+id/edit_scheduled_expense_editTextPrice"
                 style="@style/Widget.AppCompat.EditText"
@@ -35,8 +28,25 @@
                 android:text="@string/currency_zero"
                 android:inputType="numberDecimal"
                 android:minHeight="40dp"
-                android:layout_marginStart="16dp"
-                android:layout_weight="1"/>
+                android:layout_weight="2"/>
+        <Spinner
+            android:id="@+id/edit_scheduled_expense_spinnerCurrency"
+            style="@style/CurrencyDropdown"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="8dp"
+        android:layout_marginHorizontal="16dp">
+        <Spinner
+            android:id="@+id/edit_scheduled_expense_spinnerCategory"
+            style="@style/BorderedDropdown"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="40dp"
+            android:layout_weight="1"/>
     </LinearLayout>
 
     <LinearLayout

@@ -20,6 +20,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -84,6 +86,7 @@ public class QrScannerFragment extends Fragment {
                     String data = result.getContents();
                     Log.i(TAG, "Scanned: " + data);
                     PurchaseDTO purchaseDTO = new PurchaseDTO(data);
+                    purchaseDTO.setCurrency(Constants.CURRENCY.EUR);
                     qrScannerViewModel.validatePurchaseView(purchaseDTO, this::onInvalidPurchase);
                     fillQRForm(purchaseDTO);
                 } else {
@@ -173,7 +176,9 @@ public class QrScannerFragment extends Fragment {
                 if (purchaseDTO.getBillId() != null)
                     binding.qrBillIdValue.setText(purchaseDTO.getBillId());
                 if (purchaseDTO.getPrice() != null)
-                    binding.qrPriceInput.setText(AndroidUtils.formatCurrency(purchaseDTO.getPrice()));
+                    binding.qrPriceInput.setText(AndroidUtils.format(purchaseDTO.getPrice()));
+                if (purchaseDTO.getCurrency() != null)
+                    binding.qrCurrencySpinner.setSelection(Constants.CURRENCY_LIST.indexOf(purchaseDTO.getCurrency()));
                 if (purchaseDTO.getTimestamp() != null) {
                     binding.qrDateInput.setText(purchaseDTO.getTimestamp().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)));
                     binding.qrTimeInput.setText(purchaseDTO.getTimestamp().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)));
@@ -240,6 +245,7 @@ public class QrScannerFragment extends Fragment {
             Result result = reader.decode(new BinaryBitmap(new HybridBinarizer(sourceRGB)));
             Log.i(TAG, "QR Code: " + result.getText());
             PurchaseDTO purchaseDTO = new PurchaseDTO(result.toString());
+            purchaseDTO.setCurrency(Constants.CURRENCY.EUR);
             if (purchaseDTO.getPrice() == null) {
                 PurchaseHistoryApplication.getInstance().alert(R.string.failed_to_read_qr_code);
                 return;
@@ -260,6 +266,20 @@ public class QrScannerFragment extends Fragment {
                 binding.qrCategorySpinner.setSelection(categoryAdapter.getPosition(newCategory));
             }
         }));
+        SpinnerAdapter currencyAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, Constants.CURRENCY_LIST);
+
+        binding.qrCurrencySpinner.setAdapter(currencyAdapter);
+        binding.qrCurrencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                qrScannerViewModel.getPurchaseDTO().setCurrency(Constants.CURRENCY_LIST.get(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+
         binding.qrFloatingPhotoButton.setOnClickListener((view) -> openGalleryFlow(inflater));
         binding.qrFloatingQrButton.setOnClickListener((view) -> openCameraFlow(inflater));
         binding.qrClearButton.setOnClickListener(v -> resetForm());
@@ -324,7 +344,7 @@ public class QrScannerFragment extends Fragment {
         qrScannerViewModel.resetPurchaseDto();
         if (!binding.qrCategorySpinner.getAdapter().isEmpty())
             binding.qrCategorySpinner.setSelection(0, true);
-        binding.qrPriceInput.setText(AndroidUtils.formatCurrency(BigDecimal.ZERO));
+        binding.qrPriceInput.setText(AndroidUtils.format(BigDecimal.ZERO));
         binding.qrDateInput.setText(R.string.date);
         binding.qrTimeInput.setText(R.string.time);
         datePicker.setValue(LocalDate.now());

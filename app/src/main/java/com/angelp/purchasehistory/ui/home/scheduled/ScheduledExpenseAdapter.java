@@ -1,5 +1,8 @@
 package com.angelp.purchasehistory.ui.home.scheduled;
 
+import static android.content.Context.MODE_PRIVATE;
+import static com.angelp.purchasehistory.util.AndroidUtils.setNextTimestampString;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
@@ -8,20 +11,21 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.angelp.purchasehistory.R;
 import com.angelp.purchasehistory.data.Constants;
 import com.angelp.purchasehistory.util.AndroidUtils;
+import com.angelp.purchasehistory.util.CurrencyUtil;
 import com.angelp.purchasehistorybackend.models.views.outgoing.ScheduledExpenseView;
 import com.google.gson.Gson;
-import lombok.Getter;
 
 import java.util.List;
 
-import static android.content.Context.MODE_PRIVATE;
-import static com.angelp.purchasehistory.util.AndroidUtils.setNextTimestampString;
+import lombok.Getter;
 
 @Getter
 public class ScheduledExpenseAdapter extends RecyclerView.Adapter<ScheduledExpenseAdapter.ViewHolder> {
@@ -95,7 +99,7 @@ public class ScheduledExpenseAdapter extends RecyclerView.Adapter<ScheduledExpen
 
             viewCategoryBorder.getBackground().setTint(AndroidUtils.getColor(scheduledExpense.getCategory()));
             textViewName.setText(scheduledExpense.getNote());
-            textViewPrice.setText(AndroidUtils.formatCurrency(scheduledExpense.getPrice(), itemView.getContext()));
+            textViewPrice.setText(CurrencyUtil.formatPrice(scheduledExpense));
             setNextTimestampString(textViewNextDate, scheduledExpense);
             silenceButton.setChecked(!isSilenced);
             setSilencedState(isSilenced);

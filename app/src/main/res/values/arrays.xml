@@ -10,31 +10,20 @@
         <item>reply_all</item>
     </string-array>
     <string-array name="currency_list">
-        <item>@string/none</item>
         <item>BGN - лв</item>
-        <item>USD - $</item>
         <item>EUR - €</item>
-        <item>JPY - ¥</item>
-        <item>GBP - £</item>
-        <item>AUD - A$</item>
-        <item>CAD - C$</item>
-        <item>CHF - CHF</item>
-        <item>CNY - ¥</item>
-        <item>SEK - kr</item>
-        <item>NZD - NZ$</item>
     </string-array>
     <string-array name="currency_list_values">
-        <item> </item>
-        <item>лв</item>
-        <item>$</item>
-        <item>€</item>
-        <item>¥</item>
-        <item>£</item>
-        <item>A$</item>
-        <item>C$</item>
-        <item>CHF</item>
-        <item>¥</item>
-        <item>kr</item>
-        <item>NZ$</item>
+        <item>BGN</item>
+        <item>EUR</item>
+    </string-array>
+    <string-array name="language_list">
+        <item>English</item>
+        <item>Български</item>
+    </string-array>
+
+    <string-array name="language_list_values">
+        <item>en</item>
+        <item>bg</item>
     </string-array>
 </resources>

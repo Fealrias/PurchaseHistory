@@ -1,14 +1,20 @@
 package com.angelp.purchasehistory.ui.home.profile;
 
+import static com.angelp.purchasehistory.util.AndroidUtils.openCsvFile;
+
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -42,6 +48,23 @@ public class ProfileFragment extends Fragment {
     PurchaseClient purchaseClient;
     private FragmentProfileBinding binding;
 
+    private final ActivityResultLauncher<Intent> downloadCSV = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getData() != null && result.getData().getData() != null) {
+                    Uri uri = result.getData().getData();
+                    new Thread(() -> {
+                        boolean success = purchaseClient.getExportedCsv(requireContext(), uri);
+                        if (success) {
+                            openCsvFile(requireActivity(), uri);
+                        }
+
+                    }).start();
+                } else {
+                    Log.i("DOWNLOAD", "downloadCSV failed");
+                }
+            });
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -56,20 +79,19 @@ public class ProfileFragment extends Fragment {
         new Thread(() -> {
             UserAnalytics userAnalytics = userClient.getUserAnalytics(Constants.getFilter30Days());
             requireActivity().runOnUiThread(() -> {
-                binding.averageSpendingPerPurchase.setText(getString(R.string.average_spending_per_purchase, AndroidUtils.formatCurrency(userAnalytics.getAverageSpendingPerPurchase(), getContext())));
-                binding.totalSpending.setText(getString(R.string.total_spending, AndroidUtils.formatCurrency(userAnalytics.getTotalSpending(), getContext())));
+                binding.averageSpendingPerPurchase.setText(getString(R.string.average_spending_per_purchase, AndroidUtils.formatCurrency(userAnalytics.getAverageSpendingPerPurchase())));
+                binding.totalSpending.setText(getString(R.string.total_spending, AndroidUtils.formatCurrency(userAnalytics.getTotalSpending())));
                 binding.totalNumberOfPurchases.setText(getString(R.string.total_number_of_purchases, String.valueOf(userAnalytics.getTotalNumberOfPurchases())));
                 CategoryAnalyticsEntry category = userAnalytics.getMostFrequentlyPurchasedCategory();
                 if (category != null) {
                     int color = AndroidUtils.getColor(category.getCategory());
-                    int textColor = AndroidUtils.getTextColor(color);
                     Drawable background = binding.mostFrequentlyPurchasedCategoryName.getBackground();
-                    background.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SCREEN));
-                    binding.mostFrequentlyPurchasedCategoryName.setTextColor(textColor);
+                    background.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.OVERLAY));
+                    binding.mostFrequentlyPurchasedCategoryName.setTextColor(requireContext().getColor(R.color.text));
                     binding.mostFrequentlyPurchasedCategoryName.setText(category.getCategory().getName());
 
                     binding.mostFrequentlyPurchasedCategoryCount.setText(getString(R.string.most_frequently_purchased_category_count, category.getCount().toString()));
-                    binding.mostFrequentlyPurchasedCategorySum.setText(getString(R.string.most_frequently_purchased_category_sum, AndroidUtils.formatCurrency(category.getSum(), getContext())));
+                    binding.mostFrequentlyPurchasedCategorySum.setText(getString(R.string.most_frequently_purchased_category_sum, AndroidUtils.formatCurrency(category.getSum())));
                 } else {
                     binding.categoryAnalytics.setVisibility(View.GONE);
                 }
@@ -121,7 +143,7 @@ public class ProfileFragment extends Fragment {
         intent.setType("text/csv");
         intent.putExtra(Intent.EXTRA_TITLE, "purchase_history_data.csv");
         intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-        startActivityForResult(intent, AndroidUtils.SAVE_CSV_REQUEST_CODE);
+        downloadCSV.launch(intent);
     }
 
     private void showDeleteAccountConfirmation() {

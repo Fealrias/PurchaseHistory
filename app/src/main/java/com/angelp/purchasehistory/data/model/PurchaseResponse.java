@@ -3,13 +3,14 @@ package com.angelp.purchasehistory.data.model;
 import com.angelp.purchasehistorybackend.models.views.outgoing.CategoryView;
 import com.angelp.purchasehistorybackend.models.views.outgoing.PurchaseView;
 import com.angelp.purchasehistorybackend.models.views.outgoing.UserView;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,6 +32,7 @@ public class PurchaseResponse {
     private String lastModifiedDate;
 
     private CategoryView category;
+    private String currency;
 
     public PurchaseView toPurchaseView() {
         return new PurchaseView(
@@ -45,6 +47,7 @@ public class PurchaseResponse {
                 createdBy,
                 createdDate == null ? null : LocalDateTime.parse(createdDate),
                 lastModifiedBy,
-                lastModifiedDate == null ? null : LocalDateTime.parse(lastModifiedDate));
+                lastModifiedDate == null ? null : LocalDateTime.parse(lastModifiedDate),
+                currency);
     }
 }

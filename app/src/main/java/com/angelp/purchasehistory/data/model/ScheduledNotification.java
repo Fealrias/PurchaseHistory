@@ -4,19 +4,21 @@ import android.app.AlarmManager;
 import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import com.angelp.purchasehistory.util.AndroidUtils;
 import com.angelp.purchasehistorybackend.models.enums.ScheduledPeriod;
 import com.angelp.purchasehistorybackend.models.views.incoming.PurchaseDTO;
 import com.angelp.purchasehistorybackend.models.views.outgoing.ScheduledExpenseView;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Objects;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -41,6 +43,7 @@ public class ScheduledNotification implements Parcelable {
     private Long categoryId;
     private int color;
     private Boolean enabled;
+    private String currency;
     private String note;
 
     public ScheduledNotification(Long id) {
@@ -54,6 +57,7 @@ public class ScheduledNotification implements Parcelable {
         this.categoryId = expense.getCategory() == null ? null : expense.getCategory().getId();
         this.color = expense.getCategory() == null ? Color.GRAY : AndroidUtils.getColor(expense.getCategory());
         this.enabled = expense.isEnabled();
+        this.currency = expense.getCurrency();
         this.note = expense.getNote();
     }
 
@@ -66,6 +70,7 @@ public class ScheduledNotification implements Parcelable {
         timestamp = in.readLong();
         period = in.readLong();
         id = in.readLong();
+        currency = in.readString();
         enabled = in.readByte() != 0;
     }
 
@@ -99,6 +104,7 @@ public class ScheduledNotification implements Parcelable {
         dest.writeLong(timestamp);
         dest.writeLong(period);
         dest.writeLong(id);
+        dest.writeString(currency);
         dest.writeByte((byte) (enabled ? 1 : 0));
     }
 
@@ -113,6 +119,7 @@ public class ScheduledNotification implements Parcelable {
         purchaseDTO.setPrice(this.price);
         purchaseDTO.setCategoryId(this.categoryId);
         purchaseDTO.setTimestamp(LocalDateTime.now());
+        purchaseDTO.setCurrency(this.currency);
         return purchaseDTO;
     }
 

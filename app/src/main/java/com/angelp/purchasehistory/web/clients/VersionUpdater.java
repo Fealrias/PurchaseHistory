@@ -40,7 +40,7 @@ public class VersionUpdater extends HttpClient {
                         if (isUpdateAvailable) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.BaseDialogStyle);
                             builder.setTitle(R.string.update_available);
-                            builder.setMessage(context.getString(R.string.update_available_description, update.getLatestVersion(), update.getReleaseNotes()));
+                            builder.setMessage(context.getString(R.string.update_available_description, update.getLatestVersion()));
                             builder.setPositiveButton(R.string.download, (dialog, which) -> {
                                 download(update, context);
                             });

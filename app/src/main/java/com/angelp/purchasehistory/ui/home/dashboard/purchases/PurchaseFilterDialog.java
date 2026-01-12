@@ -1,5 +1,7 @@
 package com.angelp.purchasehistory.ui.home.dashboard.purchases;
 
+import static com.angelp.purchasehistory.data.Constants.getDefaultFilter;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -11,10 +13,12 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
+
 import com.angelp.purchasehistory.R;
 import com.angelp.purchasehistory.components.form.DatePickerFragment;
 import com.angelp.purchasehistory.data.Constants;
@@ -24,19 +28,20 @@ import com.angelp.purchasehistory.databinding.FragmentPurchaseFilterDialogBindin
 import com.angelp.purchasehistory.ui.home.qr.CategorySpinnerAdapter;
 import com.angelp.purchasehistory.web.clients.PurchaseClient;
 import com.angelp.purchasehistorybackend.models.views.outgoing.CategoryView;
-import dagger.hilt.android.AndroidEntryPoint;
-import lombok.Getter;
-import lombok.Setter;
+
 import org.jetbrains.annotations.NotNull;
 
-import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.angelp.purchasehistory.data.Constants.getDefaultFilter;
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -125,8 +130,7 @@ public class PurchaseFilterDialog extends DialogFragment {
         });
         binding.filterLastYear.setOnClickListener((v) -> {
             LocalDate from = LocalDate.now().minusYears(1).withMonth(1).withDayOfMonth(1);
-            LocalDate to = LocalDate.now().minusYears(1).withMonth(12).withDayOfMonth(31);
-            quickUpdateFilter(from, to);
+            quickUpdateFilter(from);
         });
     }
 

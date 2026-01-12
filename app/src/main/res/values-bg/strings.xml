@@ -73,7 +73,7 @@
     <string name="title_purchases_list">Списък с покупки</string>
     <string name="retry_btn">Опитай отново</string>
     <string name="dashboard_wip">В процес на разработка. моля игнорирайте ☺</string>
-    <string name="filterButton">Филтрирай</string>
+    <string name="filterButton">Филтър</string>
     <string name="to">До</string>
     <string name="from">От</string>
     <string name="logo">Лого</string>
@@ -118,12 +118,12 @@
     <string name="email_not_found_400">Не е намерен акаунт с този email.</string>
     <string name="no_purchases_to_show">Няма бележки за показване</string>
     <string name="could_not_download_file">Грешка при тегленето на файла</string>
-    <string name="this_week">Последните 7 дни</string>
+    <string name="this_week">7 дни</string>
     <string name="this_month">Този месец</string>
-    <string name="three_months">Последните 3 месеца</string>
-    <string name="six_months">Последните 6 месеца</string>
+    <string name="three_months">3 месеца</string>
+    <string name="six_months">6 месеца</string>
     <string name="this_year">Тази година</string>
-    <string name="last_year">Миналата година</string>
+    <string name="last_year">2 години</string>
     <string name="edit_categories">Редактирай своите категории</string>
     <string name="edit_category">Редактиране на категория #%s</string>
     <string name="application_settings">Настройки на Приложението</string>
@@ -217,7 +217,7 @@
     <string name="prompt_current_password">Сегашната ви парола</string>
     <string name="failed_to_update_profile">Неуспешно актуализиране на профила</string>
     <string name="profile_updated_successfully">Профилът е актуализиран успешно</string>
-    <string name="edit_currency">Редактиране на предпочитаната валута</string>
+    <string name="edit_currency">Валута за визуализиране</string>
     <string name="edit_currency_summary">Показаната валута</string>
     <string name="server_something_went_wrong">Нещо се обърка, моля опитайте отново по-късно</string>
     <string name="close">Затвори</string>
@@ -312,4 +312,7 @@
     <string name="update_available_description">Бихте ли искали да изтеглите версия %s сега?</string>
     <string name="download">Изтегли</string>
     <string name="scan_the_qr">Сканирай QR кода от касовия бон</string>
+    <string name="qr_from_image">Галерия</string>
+    <string name="select_language">Избери език</string>
+    <string name="select_language_summary">Избери си предпочитания за приложението език</string>
 </resources>

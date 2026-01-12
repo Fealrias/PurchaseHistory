@@ -144,7 +144,7 @@ public class AccumulativeChartFragment extends RefreshablePurchaseFragment imple
                 data.addDataSet(lineDataSet);
             }
             data.setValueTextColor(appColorCollection.getForegroundColor());
-            data.setValueFormatter(new CurrencyValueFormatter(AndroidUtils.getCurrencySymbol(requireContext())));
+            data.setValueFormatter(new CurrencyValueFormatter(AndroidUtils.getPreferredCurrencySymbol()));
             notifyDataChanged(data);
             isRefreshing.postValue(false);
         }).start();

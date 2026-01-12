@@ -4,11 +4,13 @@ import static android.content.Context.MODE_PRIVATE;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.format.DateUtils;
@@ -19,8 +21,12 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import androidx.annotation.ColorInt;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.pm.ShortcutManagerCompat;
+import androidx.core.os.LocaleListCompat;
+
 import com.angelp.purchasehistory.MainActivity;
 import com.angelp.purchasehistory.PurchaseHistoryApplication;
 import com.angelp.purchasehistory.R;
@@ -33,12 +39,14 @@ import com.angelp.purchasehistory.web.clients.PurchaseClient;
 import com.angelp.purchasehistorybackend.models.enums.ScheduledPeriod;
 import com.angelp.purchasehistorybackend.models.views.outgoing.CategoryView;
 import com.angelp.purchasehistorybackend.models.views.outgoing.ScheduledExpenseView;
+import com.angelp.purchasehistorybackend.models.views.outgoing.UserView;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.BarLineChartBase;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LegendEntry;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -53,7 +61,6 @@ import java.util.stream.Collectors;
 
 public final class AndroidUtils {
     public static final List<String> SCHEDULED_PERIOD_LIST = Arrays.stream(ScheduledPeriod.values()).map(Enum::toString).collect(Collectors.toList());
-    public static final int SAVE_CSV_REQUEST_CODE = 199999;
 
     public static void shareString(String token, String title, Context context) {
         Log.i("Sharing", "Attempting to share a string.");
@@ -128,19 +135,15 @@ public final class AndroidUtils {
         return password == null || password.trim().length() <= 5;
     }
 
-    public static void openCsvFile(Activity context, String name) {
-        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-        intent.setType("text/csv");
-        intent.putExtra(Intent.EXTRA_TITLE, name);
-        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    public static void openCsvFile(Activity context, Uri uri) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(uri, "text/csv");
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-        // Check if there's an activity available to handle this intent
-        if (intent.resolveActivity(context.getPackageManager()) != null) {
-            context.startActivityForResult(intent, SAVE_CSV_REQUEST_CODE);
-        } else {
-            // Handle the case when there's no activity available to handle the intent
-            PurchaseHistoryApplication.getInstance().alert("No application available to save CSV files");
+        try {
+            context.startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            Log.e("OPEN_CSV", "No app found to open CSV file", e);
         }
     }
 
@@ -173,29 +176,36 @@ public final class AndroidUtils {
     }
 
     @NotNull
-    public static String formatCurrency(BigDecimal price) {
-        return formatCurrency(price.floatValue());
-    }
-
-    @NotNull
     public static String formatCurrency(float price) {
-        return String.format(Locale.US, "%.2f", price);
+        return formatCurrency(price, AndroidUtils.getPreferredCurrency());
     }
-
     @NotNull
-    public static String formatCurrency(BigDecimal price, Context context) {
+    public static String format(BigDecimal price) {
         float f = price == null ? 0f : price.floatValue();
-        return formatCurrency(f, context);
+        return String.format(Locale.US, "%.2f", f);
+    }
+    @NotNull
+    public static String formatCurrency(BigDecimal price) {
+        return formatCurrency(price, AndroidUtils.getPreferredCurrency());
     }
 
     @NotNull
-    public static String formatCurrency(float price, Context context) {
-        return String.format(Locale.US, "%.2f %s", price, getCurrencySymbol(context));
+    public static String formatCurrency(BigDecimal price, String currency) {
+        float f = price == null ? 0f : price.floatValue();
+        return formatCurrency(f, currency);
     }
 
-    public static String getCurrencySymbol(Context context) {
-        SharedPreferences appPreferences = context.getSharedPreferences(Constants.Preferences.APP_PREFERENCES, MODE_PRIVATE);
-        return appPreferences.getString(Constants.Preferences.PREFERRED_CURRENCY, "");
+    @NotNull
+    public static String formatCurrency(float price, String currency) {
+        return String.format(Locale.US, "%.2f %s", price, CurrencyUtil.getCurrencyString(currency));
+    }
+
+    public static String getPreferredCurrency() {
+        UserView value = PurchaseHistoryApplication.getInstance().loggedUser.getValue();
+        return value == null ? "" : value.getPreferredCurrency();
+    }
+    public static String getPreferredCurrencySymbol() {
+        return CurrencyUtil.getCurrencyString(getPreferredCurrency());
     }
 
     public static void initChart(BarLineChartBase<?> chart, AppColorCollection colors, String format, Typeface tf) {
@@ -325,5 +335,10 @@ public final class AndroidUtils {
     public static boolean isFirstTimeOpen(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(Constants.Preferences.APP_PREFERENCES, MODE_PRIVATE);
         return preferences.getBoolean(Constants.Preferences.IS_FIRST_TIME_OPEN, true);
+    }
+
+    public static void setLocale(String languageCode) {
+        LocaleListCompat appLocale = LocaleListCompat.forLanguageTags(languageCode);
+        AppCompatDelegate.setApplicationLocales(appLocale);
     }
 }

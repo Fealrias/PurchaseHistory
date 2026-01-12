@@ -12,10 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
+
 import com.angelp.purchasehistory.R;
 import com.angelp.purchasehistory.data.AppColorCollection;
 import com.angelp.purchasehistory.data.Constants;
@@ -33,10 +35,9 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import dagger.hilt.android.AndroidEntryPoint;
+
 import org.jetbrains.annotations.NotNull;
 
-import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
@@ -45,6 +46,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class LineChartFragment extends RefreshablePurchaseFragment implements OnChartValueSelectedListener {
@@ -126,7 +131,7 @@ public class LineChartFragment extends RefreshablePurchaseFragment implements On
             }
 
             data.setValueTextColor(appColorCollection.getForegroundColor());
-            data.setValueFormatter(new CurrencyValueFormatter(AndroidUtils.getCurrencySymbol(requireContext())));
+            data.setValueFormatter(new CurrencyValueFormatter(AndroidUtils.getPreferredCurrencySymbol()));
             notifyDataChanged(data);
             isRefreshing.postValue(false);
         }).start();

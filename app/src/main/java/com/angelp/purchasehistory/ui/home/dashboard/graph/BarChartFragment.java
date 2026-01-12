@@ -160,7 +160,7 @@ public class BarChartFragment extends RefreshablePurchaseFragment implements OnC
 
         barDataSet.setValueTextColor(appColorCollection.getForegroundColor());
         barDataSet.setValueTypeface(tf);
-        barDataSet.setValueFormatter(new CurrencyValueFormatter(AndroidUtils.getCurrencySymbol(requireContext())));
+        barDataSet.setValueFormatter(new CurrencyValueFormatter(AndroidUtils.getPreferredCurrencySymbol()));
 
         data.setBarWidth(0.9f);
         notifyDataChanged(data);

@@ -132,7 +132,7 @@
     <string name="three_months">Three months</string>
     <string name="six_months">Six Months</string>
     <string name="this_year">This year</string>
-    <string name="last_year">Last year</string>
+    <string name="last_year">Two years</string>
     <string name="edit_categories">Edit categories</string>
     <string name="edit_category">Edit category #%s</string>
     <string name="application_settings">Application settings</string>
@@ -318,4 +318,7 @@ Here you can:\n
     <string name="update_available_description">A new version is available, %s would you like to download it now?</string>
     <string name="download">Download</string>
     <string name="scan_the_qr">Scan the QR code from a bill</string>
+    <string name="qr_from_image">Gallery</string>
+    <string name="select_language">Select Language</string>
+    <string name="select_language_summary">Choose your preferred app language</string>
 </resources>

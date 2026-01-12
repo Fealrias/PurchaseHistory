@@ -8,9 +8,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.angelp.purchasehistory.R;
 import com.angelp.purchasehistory.data.Constants;
 import com.angelp.purchasehistory.data.filters.PurchaseFilter;
@@ -23,11 +25,14 @@ import com.angelp.purchasehistory.util.AndroidUtils;
 import com.angelp.purchasehistory.web.clients.PurchaseClient;
 import com.angelp.purchasehistorybackend.models.views.outgoing.PurchaseView;
 import com.angelp.purchasehistorybackend.models.views.outgoing.analytics.PurchaseListView;
-import dagger.hilt.android.AndroidEntryPoint;
+
 import org.jetbrains.annotations.NotNull;
 
-import javax.inject.Inject;
 import java.util.List;
+
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class PurchaseListDashboardFragment extends RefreshablePurchaseFragment {
@@ -81,7 +86,7 @@ public class PurchaseListDashboardFragment extends RefreshablePurchaseFragment {
             new Handler(Looper.getMainLooper()).post(() -> {
                 if (binding != null) {
                     setShowEmptyView(purchases.isEmpty());
-                    binding.purchaseSumText.setText(AndroidUtils.formatCurrency(purchaseListView.getTotalSum(), getContext()));
+                    binding.purchaseSumText.setText(AndroidUtils.formatCurrency(purchaseListView.getTotalSum()));
                     binding.purchaseList.setLayoutManager(llm);
                     binding.purchaseList.setAdapter(purchasesAdapter);
                 }
@@ -133,7 +138,7 @@ public class PurchaseListDashboardFragment extends RefreshablePurchaseFragment {
         new Handler(Looper.getMainLooper()).post(() -> {
             setShowEmptyView(allPurchases.getContent().isEmpty());
             purchasesAdapter.setPurchaseViews(allPurchases.getContent());
-            binding.purchaseSumText.setText(AndroidUtils.formatCurrency(allPurchases.getTotalSum(), getContext()));
+            binding.purchaseSumText.setText(AndroidUtils.formatCurrency(allPurchases.getTotalSum()));
             updateSeeAllButton(allPurchases.getContent().size(), maxSize);
         });
     }

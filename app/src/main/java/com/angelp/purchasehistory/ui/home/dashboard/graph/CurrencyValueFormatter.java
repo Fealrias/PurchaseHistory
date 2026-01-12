@@ -1,6 +1,6 @@
 package com.angelp.purchasehistory.ui.home.dashboard.graph;
 
-import com.angelp.purchasehistory.util.AndroidUtils;
+import java.util.Locale;
 
 public class CurrencyValueFormatter extends com.github.mikephil.charting.formatter.ValueFormatter {
 
@@ -15,7 +15,7 @@ public class CurrencyValueFormatter extends com.github.mikephil.charting.formatt
         if (value <= 0) {
             return "";
         } else {
-            return AndroidUtils.formatCurrency(value) + string;
+            return String.format(Locale.US, "%.2f %s", value, string);
         }
     }
 }

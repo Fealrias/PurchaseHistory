@@ -1,26 +1,32 @@
 package com.angelp.purchasehistory.ui.home.dashboard.purchases;
 
+import static com.angelp.purchasehistory.data.Constants.Arguments.PURCHASE_EDIT_DIALOG_CONTENT_KEY;
+import static com.angelp.purchasehistory.data.Constants.Arguments.PURCHASE_EDIT_DIALOG_ID_KEY;
+
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
+
 import com.angelp.purchasehistory.PurchaseHistoryApplication;
 import com.angelp.purchasehistory.data.filters.PurchaseFilterSingleton;
 import com.angelp.purchasehistory.data.interfaces.ViewHolder;
+import com.angelp.purchasehistory.data.model.parcel.PurchaseParcel;
 import com.angelp.purchasehistory.databinding.RecyclerViewPurchaseBinding;
 import com.angelp.purchasehistory.util.AndroidUtils;
-import com.angelp.purchasehistorybackend.models.views.incoming.PurchaseDTO;
 import com.angelp.purchasehistorybackend.models.views.outgoing.PurchaseView;
-import lombok.Getter;
+
 import org.jetbrains.annotations.NotNull;
 
-import javax.inject.Inject;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-import static com.angelp.purchasehistory.data.Constants.Arguments.PURCHASE_EDIT_DIALOG_ID_KEY;
+import javax.inject.Inject;
+
+import lombok.Getter;
 
 @Getter
 public class PurchasesViewHolder extends ViewHolder<PurchaseView> {
@@ -42,7 +48,7 @@ public class PurchasesViewHolder extends ViewHolder<PurchaseView> {
         editDialog = new PurchaseEditDialog();
         this.fragmentManager = fragmentManager;
         if (purchaseView.getPrice() != null)
-            binding.purchasePriceText.setText(AndroidUtils.formatCurrency(purchaseView.getPrice(), itemView.getContext()));
+            binding.purchasePriceText.setText(AndroidUtils.formatCurrency(purchaseView.getPrice(), purchaseView.getCurrency()));
         else binding.purchasePriceText.setText("-");
         if (purchaseView.getNote() != null) {
             binding.purchaseNoteText.setText(purchaseView.getNote());
@@ -73,10 +79,10 @@ public class PurchasesViewHolder extends ViewHolder<PurchaseView> {
             binding.purchaseEditButton.setEnabled(true);
             binding.purchaseEditButton.setOnClickListener((v) -> {
                 if (purchaseView.getId() != null) {
-                    PurchaseDTO purchaseDTO = generatePurchaseDTO(purchaseView);
-                    editDialog.setPurchase(purchaseDTO);
+                    PurchaseParcel purchaseDTO = generatePurchaseDTO(purchaseView);
                     Bundle bundle = new Bundle();
                     bundle.putLong(PURCHASE_EDIT_DIALOG_ID_KEY, purchaseView.getId());
+                    bundle.putParcelable(PURCHASE_EDIT_DIALOG_CONTENT_KEY, purchaseDTO);
                     editDialog.setArguments(bundle);
                     editDialog.show(fragmentManager, "editDialog" + purchaseView.getBillId());
                     editDialog.setOnSuccess((newView) -> {
@@ -93,14 +99,15 @@ public class PurchasesViewHolder extends ViewHolder<PurchaseView> {
 
     }
 
-    private PurchaseDTO generatePurchaseDTO(PurchaseView purchaseView) {
-        PurchaseDTO purchaseDTO = new PurchaseDTO();
+    private PurchaseParcel generatePurchaseDTO(PurchaseView purchaseView) {
+        PurchaseParcel purchaseDTO = new PurchaseParcel();
         purchaseDTO.setQrContent(purchaseView.getQrContent());
         purchaseDTO.setPrice(purchaseView.getPrice());
         purchaseDTO.setTimestamp(purchaseView.getTimestamp());
         purchaseDTO.setBillId(purchaseView.getBillId());
         purchaseDTO.setStoreId(purchaseView.getStoreId());
         purchaseDTO.setNote(purchaseView.getNote());
+        purchaseDTO.setCurrency(purchaseView.getCurrency());
         if (purchaseView.getCategory() != null) purchaseDTO.setCategoryId(purchaseView.getCategory().getId());
         return purchaseDTO;
     }

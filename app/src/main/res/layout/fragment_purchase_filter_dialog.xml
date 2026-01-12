@@ -54,6 +54,10 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:maxLines="1"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="8sp"
+            android:autoSizeMaxTextSize="16sp"
             android:text="@string/this_week"/>
 
         <Button
@@ -63,6 +67,10 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:maxLines="1"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="8sp"
+            android:autoSizeMaxTextSize="16sp"
             android:text="@string/this_month" />
 
         <Button
@@ -97,6 +105,10 @@
             android:layout_height="match_parent"
             android:background="@drawable/button_rc_bottom_left"
             android:layout_weight="1"
+            android:maxLines="1"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="8sp"
+            android:autoSizeMaxTextSize="16sp"
             android:text="@string/six_months" />
 
         <Button
@@ -105,7 +117,10 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:background="@drawable/button_block"
-
+            android:maxLines="1"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="8sp"
+            android:autoSizeMaxTextSize="16sp"
             android:layout_weight="1"
             android:text="@string/this_year" />
 
@@ -115,7 +130,10 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:background="@drawable/button_rc_bottom_right"
-
+            android:maxLines="1"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="8sp"
+            android:autoSizeMaxTextSize="16sp"
             android:layout_weight="1"
             android:text="@string/last_year" />
     </LinearLayout>

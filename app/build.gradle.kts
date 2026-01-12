@@ -19,6 +19,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        proguardFiles("proguard-rules.pro")
     }
 
     buildTypes {
@@ -62,7 +63,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.10.0")
     implementation("androidx.navigation:navigation-fragment:2.9.6")
     implementation("androidx.navigation:navigation-ui:2.9.6")
-    implementation(files("libs/OutgoingViews_PurchaseHistory.jar-0.7.0-plain.jar"))
+    implementation(files("libs/OutgoingViews_PurchaseHistory.jar-0.7.3-plain.jar"))
 //    auto update
     implementation("com.github.javiersantos:AppUpdater:2.7")
     //captcha
