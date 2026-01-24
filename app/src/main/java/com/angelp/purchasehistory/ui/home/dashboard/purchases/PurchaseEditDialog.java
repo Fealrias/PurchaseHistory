@@ -30,6 +30,7 @@ import com.angelp.purchasehistory.data.model.parcel.PurchaseParcel;
 import com.angelp.purchasehistory.databinding.FragmentPurchaseEditDialogBinding;
 import com.angelp.purchasehistory.ui.home.qr.CategorySpinnerAdapter;
 import com.angelp.purchasehistory.util.AfterTextChangedWatcher;
+import com.angelp.purchasehistory.util.AndroidUtils;
 import com.angelp.purchasehistory.util.Utils;
 import com.angelp.purchasehistory.web.clients.PurchaseClient;
 import com.angelp.purchasehistorybackend.models.views.incoming.PurchaseDTO;
@@ -206,6 +207,9 @@ public class PurchaseEditDialog extends DialogFragment {
                         break;
                     }
                 }
+            } else {
+                allCategories.add(0, new CategoryView());
+                binding.purchaseEditCategorySpinner.setSelection(0);
             }
             if (view.getCurrency() != null) {
                 binding.purchaseEditCurrencySpinner.setSelection(Constants.CURRENCY_LIST.indexOf(purchase.getCurrency()));
@@ -220,7 +224,7 @@ public class PurchaseEditDialog extends DialogFragment {
             new Thread(() -> {
                 PurchaseView purchaseView = purchaseClient.editPurchase(data, id);
                 if (purchaseView != null) {
-                    PurchaseHistoryApplication.getInstance().alert("Updated purchase #" + purchaseView.getBillId() + ". Cost:" + purchaseView.getPrice());
+                    PurchaseHistoryApplication.getInstance().alert("Updated purchase " + purchaseView.getCategory() + ". Cost:" + AndroidUtils.formatCurrency(purchaseView.getPrice()));
                     if (getActivity() != null) {
                         getActivity().runOnUiThread(() -> {
                             resetForm();
@@ -239,7 +243,7 @@ public class PurchaseEditDialog extends DialogFragment {
 
     private void resetForm() {
         Bundle arguments = getArguments();
-        if(arguments!=null){
+        if (arguments != null) {
             this.purchase = arguments.getParcelable(Constants.Arguments.PURCHASE_EDIT_DIALOG_CONTENT_KEY);
             this.purchaseId = arguments.getLong(PURCHASE_EDIT_DIALOG_ID_KEY);
         } else {

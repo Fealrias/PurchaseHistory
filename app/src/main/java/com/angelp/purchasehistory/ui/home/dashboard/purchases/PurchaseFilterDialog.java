@@ -24,6 +24,7 @@ import com.angelp.purchasehistory.components.form.DatePickerFragment;
 import com.angelp.purchasehistory.data.Constants;
 import com.angelp.purchasehistory.data.filters.PurchaseFilter;
 import com.angelp.purchasehistory.data.filters.PurchaseFilterSingleton;
+import com.angelp.purchasehistory.data.filters.TimeButton;
 import com.angelp.purchasehistory.databinding.FragmentPurchaseFilterDialogBinding;
 import com.angelp.purchasehistory.ui.home.qr.CategorySpinnerAdapter;
 import com.angelp.purchasehistory.web.clients.PurchaseClient;
@@ -61,6 +62,7 @@ public class PurchaseFilterDialog extends DialogFragment {
     private ArrayAdapter<CategoryView> categoryAdapter;
     private PurchaseFilter filter;
     private List<CategoryView> categoryOptions = new ArrayList<>();
+    private List<TimeButton> timeButtons = new ArrayList<>();
 
     public PurchaseFilterDialog() {
         setStyle(DialogFragment.STYLE_NORMAL, R.style.BaseDialogStyle);
@@ -96,42 +98,47 @@ public class PurchaseFilterDialog extends DialogFragment {
         datePickerTo = new DatePickerFragment();
         datePickerFrom.getDateResult().observe(getViewLifecycleOwner(), (v) -> {
             filter.setFrom(v);
+            updateSelectedTimeButton();
             binding.purchaseFilterFromDate.setText(v.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)));
         });
         datePickerTo.getDateResult().observe(getViewLifecycleOwner(), (v) -> {
             filter.setTo(v);
+            updateSelectedTimeButton();
             binding.purchaseFilterToDate.setText(v.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)));
         });
         binding.purchaseFilterClearButton.setOnClickListener(v -> {
             if (getActivity() != null)
                 getActivity().runOnUiThread(this::resetForm);
+            updateSelectedTimeButton();
         });
         binding.purchaseFilterFromDate.setOnClickListener((v) -> datePickerFrom.show(getParentFragmentManager(), "datePickerFrom"));
         binding.purchaseFilterToDate.setOnClickListener((v) -> datePickerTo.show(getParentFragmentManager(), "datePickerTo"));
-        binding.filterWeek.setOnClickListener((v) -> {
-            LocalDate from = LocalDate.now().minusDays(7);
-            quickUpdateFilter(from);
-        });
-        binding.filterMonth.setOnClickListener((v) -> {
-            LocalDate from = LocalDate.now().withDayOfMonth(1);
-            quickUpdateFilter(from);
-        });
-        binding.filter3month.setOnClickListener((v) -> {
-            LocalDate from = LocalDate.now().minusMonths(3).withDayOfMonth(1);
-            quickUpdateFilter(from);
-        });
-        binding.filter6month.setOnClickListener((v) -> {
-            LocalDate from = LocalDate.now().minusMonths(6).withDayOfMonth(1);
-            quickUpdateFilter(from);
-        });
-        binding.filterYear.setOnClickListener((v) -> {
-            LocalDate from = LocalDate.now().withMonth(1).withDayOfMonth(1);
-            quickUpdateFilter(from);
-        });
-        binding.filterLastYear.setOnClickListener((v) -> {
-            LocalDate from = LocalDate.now().minusYears(1).withMonth(1).withDayOfMonth(1);
-            quickUpdateFilter(from);
-        });
+        timeButtons.clear();
+        timeButtons.add(new TimeButton(binding.filterWeek, LocalDate.now().minusDays(7)));
+        timeButtons.add(new TimeButton(binding.filterMonth, LocalDate.now().withDayOfMonth(1)));
+        timeButtons.add(new TimeButton(binding.filter3month, LocalDate.now().minusMonths(3).withDayOfMonth(1)));
+        timeButtons.add(new TimeButton(binding.filter6month, LocalDate.now().minusMonths(6).withDayOfMonth(1)));
+        timeButtons.add(new TimeButton(binding.filterYear, LocalDate.now().withMonth(1).withDayOfMonth(1)));
+        timeButtons.add(new TimeButton(binding.filterLastYear, LocalDate.now().minusYears(1).withMonth(1).withDayOfMonth(1)));
+        for (TimeButton timeButton : timeButtons) {
+            setSelectedButton(timeButton, filter.getFrom(), filter.getTo());
+            timeButton.getButton().setOnClickListener((v) -> quickUpdateFilter(timeButton.getFrom()));
+        }
+
+    }
+
+    private void updateSelectedTimeButton() {
+        for (TimeButton timeButton : timeButtons) {
+            setSelectedButton(timeButton, filter.getFrom(), filter.getTo());
+        }
+    }
+
+    private void setSelectedButton(TimeButton timeButton, LocalDate from, LocalDate to) {
+        if (from.equals(timeButton.getFrom()) && to.equals(LocalDate.now())) {
+            timeButton.getButton().getBackground().mutate().setTint(requireContext().getColor(R.color.primaryA50));
+        } else {
+            timeButton.getButton().getBackground().setTintList(null);
+        }
     }
 
     /**

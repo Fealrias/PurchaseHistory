@@ -73,7 +73,7 @@ public class CreateCategoryDialog extends DialogFragment {
             public void afterTextChanged(Editable s) {
                 String color = s.toString();
                 if (color.trim().isEmpty() || !color.startsWith("#") || color.trim().length() != 7) {
-                    binding.colorBlob.getBackground().setTint(Color.WHITE);
+                    AndroidUtils.tint(binding.colorBlob, (Color.WHITE));
                     return;
                 }
                 int colorValue = Color.parseColor(color);

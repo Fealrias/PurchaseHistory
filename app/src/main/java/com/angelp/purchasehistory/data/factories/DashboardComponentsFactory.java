@@ -1,6 +1,7 @@
 package com.angelp.purchasehistory.data.factories;
 
 import com.angelp.purchasehistory.data.interfaces.RefreshablePurchaseFragment;
+import com.angelp.purchasehistory.ui.home.dashboard.balance.MonthlyBalanceFragment;
 import com.angelp.purchasehistory.ui.home.dashboard.graph.AccumulativeChartFragment;
 import com.angelp.purchasehistory.ui.home.dashboard.graph.BarChartFragment;
 import com.angelp.purchasehistory.ui.home.dashboard.graph.LineChartFragment;
@@ -15,6 +16,7 @@ public final class DashboardComponentsFactory {
             case "LineChartFragment" -> new LineChartFragment();
             case "AccumulativeChartFragment" -> new AccumulativeChartFragment();
             case "BarChartFragment" -> new BarChartFragment();
+            case "MonthlyBalanceFragment" -> new MonthlyBalanceFragment();
             default -> throw new IllegalStateException("Unexpected value: " + type);
         };
     }

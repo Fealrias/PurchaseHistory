@@ -18,6 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.angelp.purchasehistory.R;
+import com.angelp.purchasehistory.data.Constants;
+import com.angelp.purchasehistory.data.filters.PurchaseFilterSingleton;
 import com.angelp.purchasehistory.databinding.ActivityLoginBinding;
 import com.angelp.purchasehistory.receivers.scheduled.NotificationHelper;
 import com.angelp.purchasehistory.ui.forgotpassword.ForgotPasswordEmailActivity;
@@ -40,6 +42,8 @@ public class LoginActivity extends AppCompatActivity {
     private LoginViewModel loginViewModel;
     @Inject
     ScheduledExpenseClient scheduledExpenseClient;
+    @Inject
+    PurchaseFilterSingleton purchaseFilterSingleton;
 
 
     @Override
@@ -59,6 +63,7 @@ public class LoginActivity extends AppCompatActivity {
                 showLoginFailed(loginResult.getError());
             } else {
                 scheduleNotificationsFromUser(this);
+                purchaseFilterSingleton.updateFilter(Constants.getDefaultFilter());
                 updateUiWithUser(loginResult.getSuccess().getUsername());
                 setResult(Activity.RESULT_OK);
                 Intent intent = new Intent(this, HomeActivity.class);

@@ -321,4 +321,12 @@ Here you can:\n
     <string name="qr_from_image">Gallery</string>
     <string name="select_language">Select Language</string>
     <string name="select_language_summary">Choose your preferred app language</string>
+    <string name="title_monthly_balance">Monthly Balance</string>
+    <string name="help_info_monthly_balance">This chart shows how much money you have left until you reach your monthly spending limit. It includes your remaining amount, total spent so far, and the progress toward your set budget.</string>
+    <string name="description_monthly_balance">Displays remaining budget, amount spent, and progress toward your monthly limit with a clear progress bar.</string>
+    <string name="remaining">Remaining:</string>
+    <string name="overspent">Overspent:</string>
+    <string name="out_of">out of</string>
+    <string name="showing_balance_for_s">Showing balance for <b>%s</b></string>
+    <string name="empty_price">--.--</string>
 </resources>

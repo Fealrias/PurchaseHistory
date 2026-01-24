@@ -113,7 +113,6 @@
         <receiver
             android:name=".receivers.scheduled.TriggerScheduledExpenseReceiver"
             android:exported="false" />
-
         <meta-data
             android:name="com.google.android.gms.privacy_policy"
             android:value="file:///android_asset/privacy_policy.html" />

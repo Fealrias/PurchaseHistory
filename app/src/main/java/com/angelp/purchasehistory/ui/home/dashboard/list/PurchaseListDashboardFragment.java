@@ -43,6 +43,7 @@ public class PurchaseListDashboardFragment extends RefreshablePurchaseFragment {
     private PurchasesAdapter purchasesAdapter;
     private boolean showFilter;
     private int maxSize;
+    private PurchaseFilter localFilter;
 
     public PurchaseListDashboardFragment() {
         Bundle args = new Bundle();
@@ -54,8 +55,9 @@ public class PurchaseListDashboardFragment extends RefreshablePurchaseFragment {
         super.onViewCreated(view, savedInstanceState);
         if (binding == null) return;
         initFilterRow();
-        this.applyFilter(filterViewModel.getFilterValue());
-        initializePurchasesRecyclerView(maxSize, filterViewModel.getFilterValue());
+        PurchaseFilter filterValue = localFilter == null ? filterViewModel.getFilterValue() : localFilter;
+        this.applyFilter(filterValue);
+        initializePurchasesRecyclerView(maxSize, filterValue);
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -63,6 +65,7 @@ public class PurchaseListDashboardFragment extends RefreshablePurchaseFragment {
         maxSize = -1;
         if (getArguments() != null) {
             showFilter = getArguments().getBoolean(Constants.Arguments.ARG_SHOW_FILTER);
+            localFilter = getArguments().getParcelable(Constants.Arguments.ARG_FILTER);
             maxSize = getArguments().getInt(Constants.Arguments.ARG_MAX_SIZE);
         }
         super.setLoadingScreen(binding.loadingBar);
@@ -120,7 +123,8 @@ public class PurchaseListDashboardFragment extends RefreshablePurchaseFragment {
         });
     }
 
-    public void refresh(PurchaseFilter filter) {
+    public void refresh(PurchaseFilter mainFilter) {
+        PurchaseFilter filter = localFilter == null ? mainFilter : localFilter;
         if (purchasesAdapter == null || binding == null) {
             Log.w(TAG, "refresh: Purchases adapter is missing. Skipping refresh");
             return;

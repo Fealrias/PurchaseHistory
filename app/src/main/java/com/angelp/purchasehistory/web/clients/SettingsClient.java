@@ -1,19 +1,25 @@
 package com.angelp.purchasehistory.web.clients;
 
 import android.util.Log;
+
 import com.angelp.purchasehistorybackend.models.views.incoming.MonthlyLimitDTO;
 import com.angelp.purchasehistorybackend.models.views.outgoing.MonthlyLimitView;
-import okhttp3.Response;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import okhttp3.Response;
+
 @Singleton
 public class SettingsClient extends HttpClient {
+    @Inject
+    PurchaseClient purchaseClient;
+
     @Inject
     public SettingsClient() {
     }
@@ -23,6 +29,7 @@ public class SettingsClient extends HttpClient {
             if (res.isSuccessful() && res.body() != null) {
                 String json = res.body().string();
                 Log.d("httpResponse", "addMonthlyLimit: " + json);
+                purchaseClient.cleanCache(BACKEND_URL+ "/monthly-limit");
                 return gson.fromJson(json, MonthlyLimitView.class);
             }
         } catch (IOException e) {
@@ -48,6 +55,7 @@ public class SettingsClient extends HttpClient {
         try (Response res = put(BACKEND_URL + "/monthly-limit/" + id, monthlyLimit)) {
             if (res.isSuccessful() && res.body() != null) {
                 String json = res.body().string();
+                purchaseClient.cleanCache(BACKEND_URL+ "/monthly-limit");
                 Log.d("httpResponse", "updateMonthlyLimit: " + json);
                 return gson.fromJson(json, MonthlyLimitView.class);
             }
@@ -60,6 +68,7 @@ public class SettingsClient extends HttpClient {
     public void deleteMonthlyLimit(Long id) {
         try (Response res = delete(BACKEND_URL + "/monthly-limit/" + id)) {
             if (res.isSuccessful()) {
+                purchaseClient.cleanCache(BACKEND_URL+ "/monthly-limit");
                 Log.i("httpResponse", "deleteMonthlyLimit: Success");
             } else {
                 Log.e("deleteMonthlyLimit", "Failed to delete monthly limit");

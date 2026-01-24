@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
@@ -340,5 +341,11 @@ public final class AndroidUtils {
     public static void setLocale(String languageCode) {
         LocaleListCompat appLocale = LocaleListCompat.forLanguageTags(languageCode);
         AppCompatDelegate.setApplicationLocales(appLocale);
+    }
+
+    public static void tint(View view, int color) {
+        Drawable mutate1 = view.getBackground().mutate();
+        mutate1.setTint(color);
+        view.setBackground(mutate1);
     }
 }

@@ -79,6 +79,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 return true;
             });
         }
+//        Preference faqPreference = findPreference("help_preference");
+//        faqPreference.setOnPreferenceClickListener((p) -> navigate(FAQFragment.class));
+
+
     }
 
     private boolean navigate(Class<? extends Fragment> fragment) {
