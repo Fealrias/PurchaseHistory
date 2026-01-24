@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
@@ -85,12 +84,6 @@ public class HomeActivity extends AppCompatActivity {
         if (AndroidUtils.isFirstTimeOpen(this)) {
             showTourPrompt();
         }
-    }
-
-    @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        filter.updateFilter(Constants.getDefaultFilter());
     }
 
     @Override

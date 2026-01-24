@@ -44,21 +44,15 @@
 
         <Button
             android:id="@+id/buttonCancel"
-            style="@style/Borderless"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="@string/cancel" />
-        <Button
-            android:id="@+id/buttonDelete"
-            style="@style/Danger"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="@string/delete" />
+
         <Button
             android:id="@+id/buttonSave"
-            style="@style/Primary"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"

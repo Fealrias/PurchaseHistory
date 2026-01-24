@@ -1,5 +1,7 @@
 package com.angelp.purchasehistory.ui.home.qr;
 
+import static com.angelp.purchasehistory.util.Utils.COLOR_REGEX;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -8,14 +10,15 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.angelp.purchasehistory.R;
+import com.angelp.purchasehistory.util.AndroidUtils;
 import com.angelp.purchasehistorybackend.models.views.outgoing.CategoryView;
 
 import java.util.List;
-
-import static com.angelp.purchasehistory.util.Utils.COLOR_REGEX;
 
 public class CategorySpinnerAdapter extends ArrayAdapter<CategoryView> {
     public static final int SIZE_SMALL = 1;
@@ -42,7 +45,7 @@ public class CategorySpinnerAdapter extends ArrayAdapter<CategoryView> {
             categoryColor.setVisibility(View.VISIBLE);
             String color = COLOR_REGEX.matcher(item.getColor()).find() ? item.getColor() : "#c4c4c4";
             int parsedColor = Color.parseColor(color);
-            categoryColor.getBackground().setTint(parsedColor);
+            AndroidUtils.tint(categoryColor,parsedColor);
         }
         categoryName.setText(item.getName());
         if (SIZE_SMALL == size) {

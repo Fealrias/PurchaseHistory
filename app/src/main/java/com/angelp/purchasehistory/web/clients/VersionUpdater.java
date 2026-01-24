@@ -70,7 +70,7 @@ public class VersionUpdater extends HttpClient {
         Uri uri = Uri.parse(uriString);
 
         DownloadManager.Request request = new DownloadManager.Request(uri);
-        request.setTitle(version);
+        request.setTitle("Purchase History Update v" + version);
         request.setDescription("Downloading latest update of PurchaseHistory...");
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, filename);
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);

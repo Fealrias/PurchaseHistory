@@ -28,6 +28,7 @@ public final class Constants {
     public static final List<String> CURRENCY_LIST = List.of(CURRENCY.EUR,CURRENCY.BGN);
 
     static {
+        DEFAULT_COMPONENTS.add(new DashboardComponent("MonthlyBalanceFragment"));
         DEFAULT_COMPONENTS.add(new DashboardComponent("PieChartFragment"));
         DEFAULT_COMPONENTS.add(new DashboardComponent("LineChartFragment"));
         DEFAULT_COMPONENTS.add(new DashboardComponent("BarChartFragment"));

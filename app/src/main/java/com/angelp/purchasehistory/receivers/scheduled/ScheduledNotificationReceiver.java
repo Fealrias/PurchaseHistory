@@ -1,5 +1,7 @@
 package com.angelp.purchasehistory.receivers.scheduled;
 
+import static android.content.Context.NOTIFICATION_SERVICE;
+
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -8,11 +10,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+
 import androidx.core.app.NotificationCompat;
+
 import com.angelp.purchasehistory.R;
 import com.angelp.purchasehistory.data.model.ScheduledNotification;
-
-import static android.content.Context.NOTIFICATION_SERVICE;
 
 public class ScheduledNotificationReceiver extends BroadcastReceiver {
     public static final String SCHEDULED_NOTIFICATION_EXTRA = "SCHEDULED_NOTIFICATION_EXTRA";
@@ -38,7 +40,7 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
         PendingIntent triggerPendingIntent =
                 PendingIntent.getBroadcast(context, 0, triggerIntent, PendingIntent.FLAG_IMMUTABLE);
         NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-        NotificationChannel channel = getOrCreateChannel(manager);
+        NotificationChannel channel = NotificationHelper.getOrCreateChannel(manager, CHANNEL_ID, "Scheduled Expenses");
 
         Notification notification = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.loop)
@@ -55,12 +57,4 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
         }
     }
 
-    private NotificationChannel getOrCreateChannel(NotificationManager manager) {
-        NotificationChannel existing = manager.getNotificationChannel(CHANNEL_ID);
-        if (existing != null) return existing;
-        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Scheduled Expenses", NotificationManager.IMPORTANCE_DEFAULT);
-        channel.setDescription("Scheduled expenses");
-        manager.createNotificationChannel(channel);
-        return channel;
-    }
 }

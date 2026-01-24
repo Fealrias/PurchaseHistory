@@ -5,21 +5,29 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
+
 import androidx.fragment.app.DialogFragment;
+
 import com.angelp.purchasehistory.R;
+import com.angelp.purchasehistory.data.Constants;
 import com.angelp.purchasehistory.util.AndroidUtils;
 import com.angelp.purchasehistory.web.clients.SettingsClient;
 import com.angelp.purchasehistorybackend.models.views.incoming.MonthlyLimitDTO;
 import com.angelp.purchasehistorybackend.models.views.outgoing.MonthlyLimitView;
-import dagger.hilt.android.AndroidEntryPoint;
+
 import org.jetbrains.annotations.NotNull;
 
-import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.function.Consumer;
+
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class AddMonthlyLimitDialog extends DialogFragment {
@@ -38,6 +46,8 @@ public class AddMonthlyLimitDialog extends DialogFragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_edit_monthly_limit, null);
         EditText limitValue = view.findViewById(R.id.editTextMonthlyLimit);
+        Spinner currency = view.findViewById(R.id.monthlyCurrencySpinner);
+        currency.setAdapter(new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, Constants.CURRENCY_LIST));
         EditText limitLabel = view.findViewById(R.id.editTextMonthlyLimitLabel);
         builder.setView(view);
         View title = getLayoutInflater().inflate(R.layout.dialog_title, null);
@@ -52,6 +62,7 @@ public class AddMonthlyLimitDialog extends DialogFragment {
                 MonthlyLimitDTO monthlyLimitDTO = new MonthlyLimitDTO();
                 monthlyLimitDTO.setValue(new BigDecimal(limitValue.getText().toString()));
                 monthlyLimitDTO.setLabel(limitLabel.getText().toString());
+                monthlyLimitDTO.setCurrency(currency.getSelectedItem().toString());
                 new Thread(() -> {
                     MonthlyLimitView result = settingsClient.addMonthlyLimit(monthlyLimitDTO);
                     monthlyLimitViewConsumer.accept(result);

@@ -315,4 +315,11 @@
     <string name="qr_from_image">Галерия</string>
     <string name="select_language">Избери език</string>
     <string name="select_language_summary">Избери си предпочитания за приложението език</string>
+    <string name="title_monthly_balance">Месечен лимит</string>
+    <string name="help_info_monthly_balance">Тази графика показва колко пари ви остават до достигане на месечния ви лимит за разходи. Съдържа оставаща сума, похарчено досега и напредъка към зададения бюджет.</string>
+    <string name="description_monthly_balance">Оставащ бюджет • Похарчено • Общ лимит</string>
+    <string name="remaining">Оставащи:</string>
+    <string name="overspent">Надминаващи</string>
+    <string name="out_of">от:</string>
+    <string name="showing_balance_for_s">Баланса за месец %s</string>
 </resources>

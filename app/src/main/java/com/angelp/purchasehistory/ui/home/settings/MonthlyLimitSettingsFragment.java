@@ -3,16 +3,21 @@ package com.angelp.purchasehistory.ui.home.settings;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
+
 import com.angelp.purchasehistory.R;
+import com.angelp.purchasehistory.util.AndroidUtils;
 import com.angelp.purchasehistory.web.clients.SettingsClient;
 import com.angelp.purchasehistorybackend.models.views.outgoing.MonthlyLimitView;
-import dagger.hilt.android.AndroidEntryPoint;
+
+import java.util.List;
 
 import javax.inject.Inject;
-import java.util.List;
+
+import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class MonthlyLimitSettingsFragment extends PreferenceFragmentCompat {
@@ -52,17 +57,13 @@ public class MonthlyLimitSettingsFragment extends PreferenceFragmentCompat {
                 setupMonthlyLimit(monthlyLimit, monthlyLimitPreference);
                 monthlyLimitPreference.setOnPreferenceClickListener((p) -> {
                     editMonthlyLimitDialog = new EditMonthlyLimitDialog(monthlyLimit.getId(), monthlyLimit,
-                            (newMonthlyLimit) -> setupMonthlyLimit(newMonthlyLimit, monthlyLimitPreference));
+                            (newMonthlyLimit) -> {
+                                if (newMonthlyLimit == null)
+                                    monthlyLimitCategory.removePreference(monthlyLimitPreference);
+                                else
+                                    setupMonthlyLimit(newMonthlyLimit, monthlyLimitPreference);
+                            });
                     editMonthlyLimitDialog.show(getParentFragmentManager(), "Edit_monthly_limit");
-                    return false;
-                });
-                Preference deletePreference = new Preference(getContext());
-                deletePreference.setTitle("Delete");
-                deletePreference.setOnPreferenceClickListener((p) -> {
-                    new Thread(() -> {
-                        settingsClient.deleteMonthlyLimit(monthlyLimit.getId());
-                        new Handler(Looper.getMainLooper()).post(() -> monthlyLimitCategory.removePreference(monthlyLimitPreference));
-                    }).start();
                     return false;
                 });
                 monthlyLimitCategory.addPreference(monthlyLimitPreference);
@@ -72,9 +73,10 @@ public class MonthlyLimitSettingsFragment extends PreferenceFragmentCompat {
     }
 
     private void setupMonthlyLimit(MonthlyLimitView monthlyLimit, Preference monthlyLimitPreference) {
+
         new Handler(Looper.getMainLooper()).post(() -> {
             monthlyLimitPreference.setTitle(monthlyLimit.getLabel());
-            monthlyLimitPreference.setSummary(String.valueOf(monthlyLimit.getValue()));
+            monthlyLimitPreference.setSummary(AndroidUtils.formatCurrency(monthlyLimit.getValue()));
         });
     }
 }

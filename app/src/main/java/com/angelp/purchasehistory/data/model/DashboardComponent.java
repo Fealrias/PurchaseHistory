@@ -80,6 +80,13 @@ public class DashboardComponent implements Parcelable {
                 description = R.string.description_bar_chart;
                 landscapeOnly = true;
             }
+            case "MonthlyBalanceFragment" -> {
+                title = R.string.title_monthly_balance;
+                cardIconId = R.mipmap.monthlylimit;
+                infoDescription = R.string.help_info_monthly_balance;
+                description = R.string.description_monthly_balance;
+                landscapeOnly = false;
+            }
             case "PurchaseListPurchaseFragment" -> {
                 title = R.string.title_purchases_list;
                 cardIconId = R.mipmap.list;

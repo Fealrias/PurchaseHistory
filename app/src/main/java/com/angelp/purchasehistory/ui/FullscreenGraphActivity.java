@@ -7,11 +7,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
 import com.angelp.purchasehistory.R;
 import com.angelp.purchasehistory.data.Constants;
 import com.angelp.purchasehistory.data.factories.DashboardComponentsFactory;
@@ -21,12 +24,14 @@ import com.angelp.purchasehistory.data.interfaces.RefreshablePurchaseFragment;
 import com.angelp.purchasehistory.data.model.DashboardComponent;
 import com.angelp.purchasehistory.databinding.ActivityFullscreenGraphBinding;
 import com.angelp.purchasehistory.ui.home.HomeActivity;
+import com.angelp.purchasehistory.ui.home.dashboard.balance.MonthlyBalanceFragment;
 import com.angelp.purchasehistory.ui.home.dashboard.list.PurchaseListDashboardFragment;
 import com.angelp.purchasehistory.ui.home.dashboard.purchases.PurchaseFilterDialog;
 import com.angelp.purchasehistory.util.AndroidUtils;
-import dagger.hilt.android.AndroidEntryPoint;
 
 import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class FullscreenGraphActivity extends AppCompatActivity {
@@ -43,7 +48,12 @@ public class FullscreenGraphActivity extends AppCompatActivity {
         binding = ActivityFullscreenGraphBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         ActionBar actionBar = getSupportActionBar();
-
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                backPressed();
+            }
+        });
         dashboardComponent = getIntent().getParcelableExtra(Constants.Arguments.ARG_COMPONENT);
         if (dashboardComponent != null) {
             if (actionBar != null) {
@@ -56,7 +66,7 @@ public class FullscreenGraphActivity extends AppCompatActivity {
 
             if (dashboardComponent.isLandscapeOnly()) {
                 setRequestedOrientation(android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                if (fragment.getArguments()!=null)
+                if (fragment.getArguments() != null)
                     fragment.getArguments().putInt(Constants.Arguments.EXTERNAL_LEGEND, R.id.legendList);
             }
 
@@ -71,10 +81,18 @@ public class FullscreenGraphActivity extends AppCompatActivity {
             }
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction()
                     .replace(binding.fullscreenFragmentContainer.getId(), fragment);
-            if (dashboardComponent.getFragmentName().equals("PieChartFragment") && binding.secondaryFragmentContainer != null) {
+            boolean isPieChart = dashboardComponent.getFragmentName().equals("PieChartFragment");
+            boolean isMonthlyBalanceFragment = dashboardComponent.getFragmentName().equals("MonthlyBalanceFragment");
+            if ((isPieChart || isMonthlyBalanceFragment) && binding.secondaryFragmentContainer != null) {
                 binding.secondaryFragmentContainer.setVisibility(View.VISIBLE);
                 PurchaseListDashboardFragment listFragment = new PurchaseListDashboardFragment();
-                fragment.getArguments().putInt(Constants.Arguments.ARG_MAX_SIZE, -1);
+                Bundle arguments = listFragment.getArguments();
+                if (arguments != null) {
+                    arguments.putInt(Constants.Arguments.ARG_MAX_SIZE, -1);
+                    if (isMonthlyBalanceFragment) {
+                        arguments.putParcelable(Constants.Arguments.ARG_FILTER, ((MonthlyBalanceFragment) fragment).getLocalFilter());
+                    }
+                }
                 transaction.replace(binding.secondaryFragmentContainer.getId(), listFragment);
             } else {
                 binding.secondaryFragmentContainer.setVisibility(View.GONE);
@@ -91,11 +109,11 @@ public class FullscreenGraphActivity extends AppCompatActivity {
         if (binding == null || newFilter == null) return;
 
         int color = newFilter.getCategoryId() == null ? getResources().getColor(R.color.surfaceA20, getTheme()) : AndroidUtils.getColor(newFilter.getCategoryColor());
-        binding.filterBar.filterCategoryBtn.getBackground().setTint(color);
+        AndroidUtils.tint(binding.filterBar.filterCategoryBtn, color);
         binding.filterBar.filterCategoryBtn.setTextColor(AndroidUtils.getTextColor(color));
         binding.filterBar.filterCategoryBtn.setText(newFilter.getCategoryName() == null ? getString(R.string.category) : newFilter.getCategoryName());
         binding.filterBar.filterDateBtn.setText(newFilter.getDateString());
-        binding.verticalFilterBar.filterCategoryBtn.getBackground().setTint(color);
+        AndroidUtils.tint(binding.verticalFilterBar.filterCategoryBtn, color);
         binding.verticalFilterBar.filterCategoryBtn.setTextColor(AndroidUtils.getTextColor(color));
         binding.verticalFilterBar.filterCategoryBtn.setText(newFilter.getCategoryName() == null ? getString(R.string.category) : newFilter.getCategoryName());
         binding.verticalFilterBar.filterDateBtn.setText(newFilter.getDateString());
@@ -110,8 +128,7 @@ public class FullscreenGraphActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            //Title bar back press triggers onBackPressed()
-            onBackPressed();
+            backPressed();
             return true;
         } else if (item.getItemId() == R.id.action_icon) {
             // Show information about the activity
@@ -130,15 +147,16 @@ public class FullscreenGraphActivity extends AppCompatActivity {
             case "PieChartFragment" -> R.string.help_info_pie_chart;
             case "LineChartFragment" -> R.string.help_info_line_chart;
             case "AccumulativeChartFragment" -> R.string.help_info_accumulative_line_chart;
+            case "MonthlyBalanceFragment" -> R.string.help_info_monthly_balance;
             case "BarChartFragment" -> R.string.help_info_stacked_bar_chart;
             case "PurchaseListPurchaseFragment" -> R.string.help_info_purchases_list;
-            default -> throw new IllegalStateException("Unexpected value: " + dashboardComponent.getFragmentName());
+            default ->
+                    throw new IllegalStateException("Unexpected value: " + dashboardComponent.getFragmentName());
         };
         return getString(info);
     }
 
-    @Override
-    public void onBackPressed() {
+    public void backPressed() {
         FragmentManager fm = getSupportFragmentManager();
         if (fm.getBackStackEntryCount() > 0) {
             Log.i(TAG, "popping backstack");

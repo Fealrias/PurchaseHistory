@@ -1,6 +1,8 @@
 package com.angelp.purchasehistory.receivers.scheduled;
 
 import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -121,5 +123,14 @@ public class NotificationHelper {
         intent.putParcelableArrayListExtra(NOTIFICATION_EXTRA_ARG, list);
         context.sendBroadcast(intent);
 
+    }
+
+    public static NotificationChannel getOrCreateChannel(NotificationManager manager, String channelId, String name) {
+        NotificationChannel existing = manager.getNotificationChannel(channelId);
+        if (existing != null) return existing;
+        NotificationChannel channel = new NotificationChannel(channelId, name, NotificationManager.IMPORTANCE_DEFAULT);
+        channel.setDescription(name);
+        manager.createNotificationChannel(channel);
+        return channel;
     }
 }

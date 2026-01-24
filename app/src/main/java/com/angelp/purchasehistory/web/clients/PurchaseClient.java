@@ -17,6 +17,7 @@ import com.angelp.purchasehistorybackend.models.views.outgoing.PageView;
 import com.angelp.purchasehistorybackend.models.views.outgoing.PurchaseView;
 import com.angelp.purchasehistorybackend.models.views.outgoing.analytics.CalendarReport;
 import com.angelp.purchasehistorybackend.models.views.outgoing.analytics.CategoryAnalyticsReport;
+import com.angelp.purchasehistorybackend.models.views.outgoing.analytics.MonthlyBalance;
 import com.angelp.purchasehistorybackend.models.views.outgoing.analytics.PurchaseListView;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
@@ -64,12 +65,13 @@ public class PurchaseClient extends HttpClient {
     }
 
     private long getCacheQuotaBytes(Context context) {
-        long cacheQuotaBytes = 1024*1024*5;
+        long cacheQuotaBytes = 1024 * 1024 * 5;
         try {
             StorageManager storageManager = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
             UUID id = storageManager.getUuidForPath(context.getCacheDir());
             cacheQuotaBytes = storageManager.getCacheQuotaBytes(id);
-            if (cacheQuotaBytes > 1024*1024*2) cacheQuotaBytes-=512; // to stay under the quota
+            if (cacheQuotaBytes > 1024 * 1024 * 2)
+                cacheQuotaBytes -= 512; // to stay under the quota
         } catch (IOException e) {
             Log.e(TAG, "PurchaseClient: failed to get cache quota. Using Default 5 MB");
         }
@@ -303,8 +305,7 @@ public class PurchaseClient extends HttpClient {
                 Log.d("httpResponse", "getCategoryAnalyticsReport : " + json);
                 if (res.isSuccessful()) {
                     return gson.fromJson(json, CategoryAnalyticsReport.class);
-                }
-                else {
+                } else {
                     ErrorResponse errorResponse = gson.fromJson(json, ErrorResponse.class);
                     throw new IOException(String.valueOf(errorResponse));
                 }
@@ -333,7 +334,16 @@ public class PurchaseClient extends HttpClient {
         }
         return false;
     }
-    public void cleanCache(){
+
+    public MonthlyBalance getMonthlyBalance(PurchaseFilter filter) {
+        try (Response res = get(BACKEND_URL + "/monthly-limit/balance?" + filter)) {
+            return utils.getBody(res, MonthlyBalance.class);
+        } catch (IOException ignored) {
+        }
+        return null;
+    }
+
+    public void cleanCache() {
         try {
             cache.evictAll();
             Log.i(TAG, "cleanCache: SUCCESS");
@@ -341,7 +351,8 @@ public class PurchaseClient extends HttpClient {
             Log.e(TAG, "cleanCache: ", e);
         }
     }
-    public void cleanCache(String... url){
+
+    public void cleanCache(String... url) {
         try {
             Iterator<String> urlIterator = cache.urls();
             while (urlIterator.hasNext()) {
@@ -353,7 +364,7 @@ public class PurchaseClient extends HttpClient {
                 }
 
             }
-            Log.i(TAG, "cleanCache:"+url+" SUCCESS");
+            Log.i(TAG, "cleanCache:" + url + " SUCCESS");
         } catch (IOException e) {
             Log.e(TAG, "cleanCache: ", e);
         }
