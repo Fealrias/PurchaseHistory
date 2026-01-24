@@ -58,21 +58,17 @@ public class MonthlyBalanceFragment extends RefreshablePurchaseFragment {
     public void onViewCreated(@NonNull @NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (binding == null) return;
-        filterViewModel.getFilter().observe(this, (mainFilter -> {
-            localFilter.setFrom(mainFilter.getFrom().withDayOfMonth(1));
-            localFilter.setTo(mainFilter.getFrom().withDayOfMonth(mainFilter.getFrom().getMonth().length(mainFilter.getFrom().isLeapYear())));
-        }));
         isRefreshing.observe(requireActivity(), (isRefreshing) -> {
             if (binding != null)
                 binding.balanceBar.setIndeterminate(isRefreshing);
         });
-        addMonthlyLimitDialog = new AddMonthlyLimitDialog((limit) -> initialize(localFilter));
+        addMonthlyLimitDialog = new AddMonthlyLimitDialog((limit) -> refresh(filterViewModel.getFilterValue()));
         binding.editLimit.setOnClickListener((v) -> {
             Intent intent = new Intent(getContext(), SettingsActivity.class);
             intent.putExtra(Constants.Arguments.ACTIVITY_NAVIGATE_TO, Constants.SettingsLocations.EDIT_MONTHLY_LIMIT);
             startActivity(intent);
         });
-        initialize(localFilter);
+        refresh(filterViewModel.getFilterValue());
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -152,8 +148,10 @@ public class MonthlyBalanceFragment extends RefreshablePurchaseFragment {
         });
     }
 
-    public void refresh(PurchaseFilter ignored) {
+    public void refresh(PurchaseFilter mainFilter) {
         if (binding == null) return;
+        localFilter.setFrom(mainFilter.getFrom().withDayOfMonth(1));
+        localFilter.setTo(mainFilter.getFrom().withDayOfMonth(mainFilter.getFrom().getMonth().length(mainFilter.getFrom().isLeapYear())));
         initialize(localFilter);
     }
 }
