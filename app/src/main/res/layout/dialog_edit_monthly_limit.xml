@@ -19,8 +19,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="8dp"
-        >
+        android:layout_marginBottom="8dp">
+
         <EditText
             android:id="@+id/editTextMonthlyLimit"
             android:layout_width="0dp"
@@ -29,6 +29,7 @@
             android:layout_weight="1"
             android:hint="@string/monthly_limit_value_hint"
             android:inputType="numberDecimal" />
+
         <Spinner
             android:id="@+id/monthlyCurrencySpinner"
             style="@style/CurrencyDropdown" />
@@ -37,10 +38,17 @@
 
     <LinearLayout
         style="?android:attr/buttonBarButtonStyle"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/buttonSave"
+            style="@style/Primary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/save" />
 
         <Button
             android:id="@+id/buttonCancel"
@@ -49,20 +57,14 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="@string/cancel" />
-        <Button
+
+        <ImageButton
             android:id="@+id/buttonDelete"
             style="@style/Danger"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="@string/delete" />
-        <Button
-            android:id="@+id/buttonSave"
-            style="@style/Primary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="@string/save" />
+            android:contentDescription="@string/delete"
+            android:src="@drawable/trash" />
     </LinearLayout>
 
 </LinearLayout>

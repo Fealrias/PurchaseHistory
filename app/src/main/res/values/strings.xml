@@ -282,7 +282,7 @@ Here you can:\n
     <string name="monthly_limit_summary">Shows the monthly limit in some charts.</string>
     <string name="monthly_limit_value_summary">To hide the limit, set to -1</string>
     <string name="invalid_input_repeat">Invalid input, try again</string>
-    <string name="monthly_limit_value_hint" translatable="false">E.g. 3000</string>
+    <string name="monthly_limit_value_hint">E.g. 3000</string>
     <string name="add_new_limit">Add a new limit</string>
     <string name="add_monthly_limit">Add new Monthly Limit</string>
     <string name="edit_limits">Edit monthly limits</string>
@@ -328,5 +328,6 @@ Here you can:\n
     <string name="overspent">Overspent:</string>
     <string name="out_of">out of</string>
     <string name="showing_balance_for_s">Showing balance for <b>%s</b></string>
-    <string name="empty_price">--.--</string>
+    <string name="empty_price" translatable="false">--.--</string>
+    <string name="no_monthly_spending_limit_set">No monthly spending limit set</string>
 </resources>

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -64,7 +65,7 @@ public class EditMonthlyLimitDialog extends DialogFragment {
         ((TextView) title.findViewById(R.id.dialogTitle)).setText(R.string.edit_limit);
         builder.setCustomTitle(title);
         Button buttonSave = view.findViewById(R.id.buttonSave);
-        Button buttonDelete = view.findViewById(R.id.buttonDelete);
+        ImageButton buttonDelete = view.findViewById(R.id.buttonDelete);
         Button buttonCancel = view.findViewById(R.id.buttonCancel);
         buttonSave.setOnClickListener((v) -> {
             try {

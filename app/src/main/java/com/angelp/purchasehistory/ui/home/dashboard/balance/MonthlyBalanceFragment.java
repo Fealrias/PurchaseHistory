@@ -68,7 +68,7 @@ public class MonthlyBalanceFragment extends RefreshablePurchaseFragment {
             intent.putExtra(Constants.Arguments.ACTIVITY_NAVIGATE_TO, Constants.SettingsLocations.EDIT_MONTHLY_LIMIT);
             startActivity(intent);
         });
-        refresh(filterViewModel.getFilterValue());
+        initialize(filterViewModel.getFilterValue());
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -82,27 +82,30 @@ public class MonthlyBalanceFragment extends RefreshablePurchaseFragment {
         binding = null;
     }
 
-    private void initialize(PurchaseFilter filter) {
+    private void initialize(PurchaseFilter mainFilter) {
+        localFilter.setFrom(mainFilter.getFrom().withDayOfMonth(1));
+        localFilter.setTo(mainFilter.getFrom().withDayOfMonth(mainFilter.getFrom().getMonth().length(mainFilter.getFrom().isLeapYear())));
+
         new Thread(() -> {
             isRefreshing.postValue(true);
-            if (binding == null) return;
-            MonthlyBalance balance = purchaseClient.getMonthlyBalance(filter);
+            MonthlyBalance balance = purchaseClient.getMonthlyBalance(localFilter);
             new Handler(Looper.getMainLooper()).post(() -> {
                 if (binding == null) return;
-                String string = getString(R.string.showing_balance_for_s, filter.getFrom().format(DateTimeFormatter.ofPattern("MMMM yyyy")));
+                String string = getString(R.string.showing_balance_for_s, localFilter.getFrom().format(DateTimeFormatter.ofPattern("MMMM yyyy")));
                 binding.subHeading.setText(Html.fromHtml(string, Html.FROM_HTML_MODE_LEGACY));
                 binding.setupLimitBtn.setOnClickListener((v) -> addMonthlyLimitDialog.show(getParentFragmentManager(), "dashboard_Add_monthly_limit"));
                 binding.spendingText.setText(AndroidUtils.formatCurrency(balance.sum()));
-                if (filter.getFrom().withDayOfMonth(1).equals(LocalDate.now().withDayOfMonth(1)))
+                if (localFilter.getFrom().withDayOfMonth(1).equals(LocalDate.now().withDayOfMonth(1)))
                     binding.subHeading.setVisibility(View.GONE);
                 else binding.subHeading.setVisibility(View.VISIBLE);
             });
+            isRefreshing.postValue(false);
             if (balance.monthlyLimit() == null) {
                 new Handler(Looper.getMainLooper()).post(() -> {
+                    if (binding == null) return;
                     binding.dataView.setVisibility(View.GONE);
                     binding.missingView.setVisibility(View.VISIBLE);
                 });
-                isRefreshing.postValue(false);
                 return;
             }
 
@@ -111,27 +114,19 @@ public class MonthlyBalanceFragment extends RefreshablePurchaseFragment {
     }
 
     private void updateUI(MonthlyBalance balance) {
-        new Handler(Looper.getMainLooper()).post(() -> {
+        binding.balanceBar.post(() -> {
+            int progress = balance.progress().intValue();
             if (binding != null) {
                 binding.dataView.setVisibility(View.VISIBLE);
                 binding.missingView.setVisibility(View.GONE);
-                binding.balanceBar.setMin(0);
-                binding.balanceBar.setMax(balance.max().intValue());
-                binding.balanceBar.setProgress(balance.progress().intValue());
-                binding.remainingBalanceText.setText(AndroidUtils.formatCurrency(balance.remaining().floatValue()));
-                String text = AndroidUtils.formatCurrency(balance.monthlyLimit().getValue());
-                String label = balance.monthlyLimit().getLabel();
-                if (!label.isBlank()) text = text + "(" + label + ")";
-                binding.limitText.setText(text);
-
                 int color = requireContext().getColor(R.color.text);
                 Drawable drawable = binding.balanceBar.getProgressDrawable().mutate();
 
                 if (balance.overspent()) {
                     binding.balanceBar.setScaleX(-1);
-                    binding.balanceBar.setProgress(balance.max().subtract(balance.monthlyLimit().getValue()).intValue());
-                    color = requireContext().getColor(R.color.dangerA10);
                     drawable.setColorFilter(new BlendModeColorFilter(requireContext().getColor(R.color.dangerA10), BlendMode.SRC_IN));
+                    progress = balance.max().subtract(balance.monthlyLimit().getValue()).intValue();
+                    color = requireContext().getColor(R.color.dangerA10);
                     binding.heading.setText(R.string.overspent);
                 } else {
                     binding.balanceBar.setScaleX(1);
@@ -140,18 +135,28 @@ public class MonthlyBalanceFragment extends RefreshablePurchaseFragment {
                     binding.remainingBalanceText.setTextColor(requireContext().getColor(R.color.text));
                 }
                 binding.balanceBar.setProgressDrawable(drawable);
+                binding.balanceBar.invalidateDrawable(drawable);
+
+                binding.balanceBar.setMin(0);
+                binding.balanceBar.setMax(balance.max().intValue());
+                binding.balanceBar.setProgress(progress);
+
+                binding.balanceBar.invalidate();
+
+                binding.remainingBalanceText.setText(AndroidUtils.formatCurrency(balance.remaining().floatValue()));
+                String text = AndroidUtils.formatCurrency(balance.monthlyLimit().getValue());
+                String label = balance.monthlyLimit().getLabel();
+                if (!label.isBlank()) text = text + "(" + label + ")";
+                binding.limitText.setText(text);
                 binding.heading.setTextColor(color);
                 binding.remainingBalanceText.setTextColor(color);
-                binding.balanceBar.invalidate();
             }
-            isRefreshing.setValue(false);
+
         });
     }
 
     public void refresh(PurchaseFilter mainFilter) {
         if (binding == null) return;
-        localFilter.setFrom(mainFilter.getFrom().withDayOfMonth(1));
-        localFilter.setTo(mainFilter.getFrom().withDayOfMonth(mainFilter.getFrom().getMonth().length(mainFilter.getFrom().isLeapYear())));
-        initialize(localFilter);
+        initialize(mainFilter);
     }
 }

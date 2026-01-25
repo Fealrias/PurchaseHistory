@@ -250,6 +250,7 @@
     <string name="monthly_limit_summary">Показва месечния лимит в някои диаграми.</string>
     <string name="monthly_limit_value_summary">За да скриете лимита, задайте -1</string>
     <string name="invalid_input_repeat">Грешно попълнени данни, опитайте отново</string>
+    <string name="monthly_limit_value_hint">напр. 3000</string>
     <string name="add_new_limit">Добави нов лимит</string>
     <string name="add_monthly_limit">Добави нов месечен лимит</string>
     <string name="edit_limits">Редактирай месечните лимити</string>
@@ -322,4 +323,5 @@
     <string name="overspent">Надминаващи</string>
     <string name="out_of">от:</string>
     <string name="showing_balance_for_s">Баланса за месец %s</string>
+    <string name="no_monthly_spending_limit_set">Не е създаден месечен лимит</string>
 </resources>

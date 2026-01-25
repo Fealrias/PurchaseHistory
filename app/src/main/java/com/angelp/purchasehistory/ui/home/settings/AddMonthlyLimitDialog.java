@@ -44,7 +44,7 @@ public class AddMonthlyLimitDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.BaseDialogStyle);
         LayoutInflater inflater = requireActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_edit_monthly_limit, null);
+        View view = inflater.inflate(R.layout.dialog_add_monthly_limit, null);
         EditText limitValue = view.findViewById(R.id.editTextMonthlyLimit);
         Spinner currency = view.findViewById(R.id.monthlyCurrencySpinner);
         currency.setAdapter(new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, Constants.CURRENCY_LIST));

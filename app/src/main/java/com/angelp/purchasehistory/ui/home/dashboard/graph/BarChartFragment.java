@@ -147,7 +147,9 @@ public class BarChartFragment extends RefreshablePurchaseFragment implements OnC
         }
         LocalDate dateIterator = filter.getFrom();
         for (; dateIterator.isBefore(filter.getTo().plusDays(1)); dateIterator = dateIterator.plusDays(1L)) {
-            entries.add(parseBarEntries(dateIterator, content.get(dateIterator)));
+            List<CalendarReportEntry> entriesByDate = content.get(dateIterator);
+            if (entriesByDate!=null)
+                entries.add(parseBarEntries(dateIterator, entriesByDate));
         }
         BarDataSet barDataSet = new BarDataSet(entries, "Purchases");
         barDataSet.setValueTypeface(tf);
