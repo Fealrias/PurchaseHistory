@@ -358,13 +358,13 @@ public class PurchaseClient extends HttpClient {
             while (urlIterator.hasNext()) {
                 String next = urlIterator.next();
                 for (String s : url) {
-                    if (next.startsWith(s)) {
+                    if (next.contains(s)) {
                         urlIterator.remove();
+                        Log.d(TAG, "cleanCache:" + next + " SUCCESS");
                     }
                 }
 
             }
-            Log.i(TAG, "cleanCache:" + url + " SUCCESS");
         } catch (IOException e) {
             Log.e(TAG, "cleanCache: ", e);
         }
