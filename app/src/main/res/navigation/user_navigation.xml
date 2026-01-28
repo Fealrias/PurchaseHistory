@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.angelp.purchasehistory.ui.home.dashboard.DashboardFragment"
+        android:name="com.fealrias.purchasehistory.ui.home.dashboard.DashboardFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard" />
     <fragment
         android:id="@+id/navigation_scheduled_expenses"
-        android:name="com.angelp.purchasehistory.ui.home.scheduled.ScheduledExpensesFragment"
+        android:name="com.fealrias.purchasehistory.ui.home.scheduled.ScheduledExpensesFragment"
         android:label="@string/title_scheduled_expenses"
         tools:layout="@layout/fragment_scheduled_expenses" >
         <action
@@ -22,12 +22,12 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_qrscanner"
-        android:name="com.angelp.purchasehistory.ui.home.qr.QrScannerFragment"
+        android:name="com.fealrias.purchasehistory.ui.home.qr.QrScannerFragment"
         android:label="@string/title_activity_qrscanner"
         tools:layout="@layout/fragment_qr" />
     <fragment
         android:id="@+id/navigation_profile"
-        android:name="com.angelp.purchasehistory.ui.home.profile.ProfileFragment"
+        android:name="com.fealrias.purchasehistory.ui.home.profile.ProfileFragment"
         android:label="@string/title_activity_profile"
         tools:layout="@layout/fragment_profile">
         <action
@@ -41,12 +41,12 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_edit_profile"
-        android:name="com.angelp.purchasehistory.ui.home.profile.EditProfileFragment"
+        android:name="com.fealrias.purchasehistory.ui.home.profile.EditProfileFragment"
         android:label="@string/title_edit_activity_profile"
         tools:layout="@layout/fragment_edit_profile" />
     <fragment
         android:id="@+id/navigation_change_password"
-        android:name="com.angelp.purchasehistory.ui.home.profile.ChangePasswordFragment"
+        android:name="com.fealrias.purchasehistory.ui.home.profile.ChangePasswordFragment"
         android:label="@string/change_password"
         tools:layout="@layout/fragment_change_password" />
 

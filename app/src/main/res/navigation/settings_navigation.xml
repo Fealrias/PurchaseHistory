@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/navigation_settings"
-        android:name="com.angelp.purchasehistory.ui.home.settings.SettingsFragment"
+        android:name="com.fealrias.purchasehistory.ui.home.settings.SettingsFragment"
         android:label="@string/user_settings">
         <action
             android:id="@+id/action_navigation_settings_to_navigation_application_settings"
@@ -14,7 +14,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_application_settings"
-        android:name="com.angelp.purchasehistory.ui.home.settings.CategorySettingsFragment"
+        android:name="com.fealrias.purchasehistory.ui.home.settings.CategorySettingsFragment"
         android:label="@string/application_settings" />
 
 </navigation>

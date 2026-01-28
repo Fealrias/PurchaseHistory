@@ -45,6 +45,10 @@
         <item name="android:background">@color/primaryA50</item>
         <item name="titleTextColor">@color/text</item>
         <item name="android:gravity">center_vertical</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:autoSizeTextType">uniform</item>
+        <item name="android:autoSizeMinTextSize">12dp</item>
+        <item name="android:autoSizeMaxTextSize">24dp</item>
     </style>
 
     <style name="BorderedDropdown" parent="Widget.AppCompat.Spinner">

@@ -74,6 +74,7 @@
             tools:listitem="@layout/recycler_view_purchase" />
 
         <ImageView
+            android:layout_marginHorizontal="2dp"
             android:id="@+id/see_all_backdrop"
             android:layout_width="match_parent"
             android:layout_height="200dp"

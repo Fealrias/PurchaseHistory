@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name" >Разходи и Анализи</string>
     <string name="title_home">Начало</string>
     <string name="title_dashboard">Табло</string>
     <string name="title_notifications">Известия</string>
@@ -163,8 +164,8 @@
     <string name="title_scheduled_expenses">Планирани разходи</string>
     <string name="no_period_selected">Не е избран период</string>
     <string name="add_purchase_action">Добави като бележка</string>
-    <string name="scheduled_notification_content">Предстоящо плащане. Цена: %.2f \nДа го добавим ли към покупките?</string>
-    <string name="scheduled_notification_title">Дължимо плащане `%s`</string>
+    <string name="scheduled_notification_content">Предстоящо плащане. %s : %s \nДа го добавим ли към покупките?</string>
+    <string name="scheduled_notification_title">Напомняме за предстоящ разход `%s`</string>
     <string name="error_must_not_be_empty">Попълнете полето, моля</string>
     <string name="error_price_empty">Моля въведете правилна сума</string>
     <string name="turn_on_flashlight">Включване на фенерчето</string>

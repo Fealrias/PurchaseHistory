@@ -1,9 +1,9 @@
--dontwarn com.angelp.purchasehistorybackend.models.entities.Category
--dontwarn com.angelp.purchasehistorybackend.models.entities.MonthlyLimit
--dontwarn com.angelp.purchasehistorybackend.models.entities.ObservedUser
--dontwarn com.angelp.purchasehistorybackend.models.entities.Purchase
--dontwarn com.angelp.purchasehistorybackend.models.entities.ScheduledExpense
--dontwarn com.angelp.purchasehistorybackend.models.entities.User
+-dontwarn com.fealrias.purchasehistorybackend.models.entities.Category
+-dontwarn com.fealrias.purchasehistorybackend.models.entities.MonthlyLimit
+-dontwarn com.fealrias.purchasehistorybackend.models.entities.ObservedUser
+-dontwarn com.fealrias.purchasehistorybackend.models.entities.Purchase
+-dontwarn com.fealrias.purchasehistorybackend.models.entities.ScheduledExpense
+-dontwarn com.fealrias.purchasehistorybackend.models.entities.User
 -dontwarn com.google.api.client.auth.oauth2
 -dontwarn org.springframework.data.domain.Page
 -dontwarn org.springframework.data.domain.PageRequest
@@ -23,8 +23,8 @@
 -dontwarn org.springframework.data.domain.Sort
 -dontwarn org.springframework.lang.NonNull
 
--keep class com.angelp.purchasehistorybackend.models.** { *; }
--keepclassmembers class com.angelp.purchasehistorybackend.** {
+-keep class com.fealrias.purchasehistorybackend.models.** { *; }
+-keepclassmembers class com.fealrias.purchasehistorybackend.** {
     <init>(...);
     <fields>;
 }

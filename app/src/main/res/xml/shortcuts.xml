@@ -8,8 +8,8 @@
         android:shortcutDisabledMessage="@string/qr_disabled_message">
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetPackage="com.angelp.purchasehistory"
-            android:targetClass="com.angelp.purchasehistory.ui.home.HomeActivity" />
+            android:targetPackage="com.fealrias.purchasehistory"
+            android:targetClass="com.home.ui.purchasehistory.fealrias.HomeActivity" />
         <categories android:name="android.shortcut.conversation" />
         <capability-binding android:key="actions.intent.CREATE_MESSAGE" />
     </shortcut>-->
