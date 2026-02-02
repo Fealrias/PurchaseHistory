@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.fealrias.purchasehistory.R;
@@ -89,6 +90,7 @@ public class PurchaseListDashboardFragment extends RefreshablePurchaseFragment {
             new Handler(Looper.getMainLooper()).post(() -> {
                 if (binding != null) {
                     setShowEmptyView(purchases.isEmpty());
+                    binding.emptyView.addNewPurchaseButton.setOnClickListener((v) -> NavHostFragment.findNavController(this).navigate(R.id.navigation_qrscanner, new Bundle()));
                     binding.purchaseSumText.setText(AndroidUtils.formatCurrency(purchaseListView.getTotalSum()));
                     binding.purchaseList.setLayoutManager(llm);
                     binding.purchaseList.setAdapter(purchasesAdapter);
@@ -98,7 +100,7 @@ public class PurchaseListDashboardFragment extends RefreshablePurchaseFragment {
     }
 
     private void setShowEmptyView(boolean empty) {
-        binding.emptyView.setVisibility(empty ? View.VISIBLE : View.GONE);
+        binding.emptyView.getRoot().setVisibility(empty ? View.VISIBLE : View.GONE);
     }
 
     private void setupShowMoreButton(int purchaseSize, int maxSize) {

@@ -16,6 +16,7 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.fealrias.purchasehistory.R;
 import com.fealrias.purchasehistory.data.AppColorCollection;
@@ -125,6 +126,16 @@ public class AccumulativeChartFragment extends RefreshablePurchaseFragment imple
             isRefreshing.postValue(true);
             CalendarReport calendarReport = purchaseClient.getCalendarReport(filter);
             Map<LocalDate, List<Entry>> entriesMap = getEntries(calendarReport);
+            if (entriesMap.isEmpty()) {
+                binding.lineChartView.setVisibility(View.GONE);
+                binding.noDataComponent.getRoot().setVisibility(View.VISIBLE);
+                binding.noDataComponent.addNewPurchaseButton.setOnClickListener((v) -> NavHostFragment.findNavController(this).navigate(R.id.navigation_qrscanner, new Bundle()));
+                isRefreshing.postValue(false);
+                return;
+            }
+            binding.noDataComponent.getRoot().setVisibility(View.GONE);
+            binding.lineChartView.setVisibility(View.VISIBLE);
+
             ArrayList<Integer> colors = getColors();
             LineData data = new LineData();
             int i = 0;

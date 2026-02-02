@@ -330,4 +330,7 @@ Here you can:\n
     <string name="showing_balance_for_s">Showing balance for <b>%s</b></string>
     <string name="empty_price" translatable="false">--.--</string>
     <string name="no_monthly_spending_limit_set">No monthly spending limit set</string>
+    <string name="failed_to_load">Failed to load data.\nTry again later.</string>
+    <string name="no_data_for_filter">No data to display for the selected time frame</string>
+    <string name="no_data_for_schedule">You have no scheduled expenses.\nCreate one now to remind you in the future!</string>
 </resources>

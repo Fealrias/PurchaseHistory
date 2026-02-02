@@ -27,25 +27,40 @@
 
         <ProgressBar
             style="?android:attr/progressBarStyle"
-            android:background="@drawable/loading_dimmed"
-
             android:layout_width="80dp"
+
             android:layout_height="80dp"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:background="@drawable/loading_dimmed" />
     </FrameLayout>
 
-    <TextView
-        android:id="@+id/empty_scheduledExpenses"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/emptyScheduledExpenses"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="20dp"
-        android:padding="20dp"
-        android:text="@string/no_data"
-        android:textColor="@color/text"
-        android:visibility="gone"
-        app:drawableTint="@color/text"
-        app:drawableTopCompat="@drawable/missing" />
+        android:layout_marginTop="140dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="end"
+        android:orientation="vertical"
+        android:paddingEnd="20dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginTop="32dp"
+            android:src="@drawable/money_lupa"
+            app:tint="@color/primaryA30"
+            tools:srcCompat="@drawable/money_lupa" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:text="@string/no_data_for_schedule"
+            android:textColor="@color/text" />
+    </LinearLayout>
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddScheduledExpense"
@@ -55,5 +70,6 @@
         android:layout_marginEnd="40dp"
         android:layout_marginBottom="40dp"
         android:contentDescription="@string/add_scheduled_expense"
+        android:tint="@color/black"
         android:src="@drawable/timer" />
 </FrameLayout>

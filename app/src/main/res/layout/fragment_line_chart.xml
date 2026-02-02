@@ -38,5 +38,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
+    <include
+        android:id="@+id/no_data_component"
+        layout="@layout/no_data"
+        android:visibility="gone" />
 </androidx.constraintlayout.widget.ConstraintLayout>

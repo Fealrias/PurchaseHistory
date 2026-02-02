@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.fealrias.purchasehistory.R;
 import com.fealrias.purchasehistory.data.AppColorCollection;
@@ -114,9 +115,19 @@ public class PieChartFragment extends RefreshablePurchaseFragment implements OnC
     private void setData(PurchaseFilter filter, boolean animate) {
         CategoryAnalyticsReport report = purchaseClient.getCategoryAnalyticsReport(filter);
         if (report == null) {
-            binding.pieChart.setCenterText("Failed to load data.\nTry again later.");
+            binding.pieChart.setCenterText(getString(R.string.failed_to_load));
             return;
         }
+        if (report.getContent().isEmpty()) {
+            binding.noDataComponent.getRoot().setVisibility(View.VISIBLE);
+            binding.pieChart.setVisibility(View.GONE);
+            binding.noDataComponent.addNewPurchaseButton.setOnClickListener((v) -> NavHostFragment.findNavController(this).navigate(R.id.navigation_qrscanner, new Bundle()));
+            isRefreshing.postValue(false);
+            return;
+        }
+        binding.noDataComponent.getRoot().setVisibility(View.GONE);
+        binding.pieChart.setVisibility(View.VISIBLE);
+
         entries = report.getContent().stream().map(this::parsePieEntries).collect(Collectors.toList());
         PieDataSet dataSet = new PieDataSet(entries, getString(R.string.category));
 

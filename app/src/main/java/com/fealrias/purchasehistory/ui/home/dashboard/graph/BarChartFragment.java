@@ -12,6 +12,8 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.navigation.fragment.NavHostFragment;
+
 import com.fealrias.purchasehistory.R;
 import com.fealrias.purchasehistory.data.AppColorCollection;
 import com.fealrias.purchasehistory.data.Constants;
@@ -129,12 +131,23 @@ public class BarChartFragment extends RefreshablePurchaseFragment implements OnC
             isRefreshing.postValue(true);
             CalendarReport calendarReport = purchaseClient.getCategorizedCalendarReport(filter);
             List<CategoryView> allCategories = purchaseClient.getAllCategories();
+
             updateChart(filter, calendarReport, allCategories);
             isRefreshing.postValue(false);
         }).start();
     }
 
     private void updateChart(PurchaseFilter filter, CalendarReport calendarReport, List<CategoryView> allCategories) {
+        if (calendarReport.getContent().isEmpty()) {
+            binding.noDataComponent.getRoot().setVisibility(View.VISIBLE);
+            binding.barChartView.setVisibility(View.GONE);
+            binding.noDataComponent.addNewPurchaseButton.setOnClickListener((v) -> NavHostFragment.findNavController(this).navigate(R.id.navigation_qrscanner, new Bundle()));
+            isRefreshing.postValue(false);
+            return;
+        }
+        binding.noDataComponent.getRoot().setVisibility(View.GONE);
+        binding.barChartView.setVisibility(View.VISIBLE);
+
         Map<LocalDate, List<CalendarReportEntry>> content = prepareContent(filter, calendarReport, allCategories);
         List<String> labels = new ArrayList<>();
         List<Integer> colors = new ArrayList<>();
