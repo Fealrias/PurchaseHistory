@@ -126,16 +126,17 @@ public class AccumulativeChartFragment extends RefreshablePurchaseFragment imple
             isRefreshing.postValue(true);
             CalendarReport calendarReport = purchaseClient.getCalendarReport(filter);
             Map<LocalDate, List<Entry>> entriesMap = getEntries(calendarReport);
-            if (entriesMap.isEmpty()) {
-                binding.lineChartView.setVisibility(View.GONE);
-                binding.noDataComponent.getRoot().setVisibility(View.VISIBLE);
-                binding.noDataComponent.addNewPurchaseButton.setOnClickListener((v) -> NavHostFragment.findNavController(this).navigate(R.id.navigation_qrscanner, new Bundle()));
-                isRefreshing.postValue(false);
-                return;
-            }
-            binding.noDataComponent.getRoot().setVisibility(View.GONE);
-            binding.lineChartView.setVisibility(View.VISIBLE);
-
+            new Handler(Looper.getMainLooper()).post(() -> {
+                if (entriesMap.isEmpty()) {
+                    binding.lineChartView.setVisibility(View.GONE);
+                    binding.noDataComponent.getRoot().setVisibility(View.VISIBLE);
+                    binding.noDataComponent.addNewPurchaseButton.setOnClickListener((v) -> NavHostFragment.findNavController(this).navigate(R.id.navigation_qrscanner, new Bundle()));
+                    isRefreshing.postValue(false);
+                    return;
+                }
+                binding.noDataComponent.getRoot().setVisibility(View.GONE);
+                binding.lineChartView.setVisibility(View.VISIBLE);
+            });
             ArrayList<Integer> colors = getColors();
             LineData data = new LineData();
             int i = 0;
@@ -203,8 +204,8 @@ public class AccumulativeChartFragment extends RefreshablePurchaseFragment imple
             binding.lineChartView.notifyDataSetChanged();
             binding.lineChartView.animateY(1000);
             binding.lineChartView.invalidate();
-            new Thread(()->{
-                if (legendId != null && getActivity()!=null) {
+            new Thread(() -> {
+                if (legendId != null && getActivity() != null) {
                     Legend legend = binding.lineChartView.getLegend();
                     ListView listView = getActivity().findViewById(legendId);
                     legend.setEnabled(AndroidUtils.setLegendList(legend, listView));

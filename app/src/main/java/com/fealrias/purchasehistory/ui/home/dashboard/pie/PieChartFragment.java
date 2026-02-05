@@ -53,14 +53,14 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class PieChartFragment extends RefreshablePurchaseFragment implements OnChartValueSelectedListener {
     private static final String ARG_FILTER = "purchase_filter";
     private final String TAG = this.getClass().getSimpleName();
+    @Inject
+    PurchaseClient purchaseClient;
     private FragmentPieChartBinding binding;
     private boolean showFilter;
     private AppColorCollection appColorCollection;
     private Typeface tf;
     private BigDecimal sum;
     private List<PieEntry> entries = new ArrayList<>();
-    @Inject
-    PurchaseClient purchaseClient;
 
     public PieChartFragment() {
         Bundle args = new Bundle();
@@ -114,19 +114,21 @@ public class PieChartFragment extends RefreshablePurchaseFragment implements OnC
 
     private void setData(PurchaseFilter filter, boolean animate) {
         CategoryAnalyticsReport report = purchaseClient.getCategoryAnalyticsReport(filter);
-        if (report == null) {
-            binding.pieChart.setCenterText(getString(R.string.failed_to_load));
-            return;
-        }
-        if (report.getContent().isEmpty()) {
-            binding.noDataComponent.getRoot().setVisibility(View.VISIBLE);
-            binding.pieChart.setVisibility(View.GONE);
-            binding.noDataComponent.addNewPurchaseButton.setOnClickListener((v) -> NavHostFragment.findNavController(this).navigate(R.id.navigation_qrscanner, new Bundle()));
-            isRefreshing.postValue(false);
-            return;
-        }
-        binding.noDataComponent.getRoot().setVisibility(View.GONE);
-        binding.pieChart.setVisibility(View.VISIBLE);
+        new Handler(Looper.getMainLooper()).post(() -> {
+            if (report == null) {
+                binding.pieChart.setCenterText(getString(R.string.failed_to_load));
+                return;
+            }
+            if (report.getContent().isEmpty()) {
+                binding.noDataComponent.getRoot().setVisibility(View.VISIBLE);
+                binding.pieChart.setVisibility(View.GONE);
+                binding.noDataComponent.addNewPurchaseButton.setOnClickListener((v) -> NavHostFragment.findNavController(this).navigate(R.id.navigation_qrscanner, new Bundle()));
+                isRefreshing.postValue(false);
+                return;
+            }
+            binding.noDataComponent.getRoot().setVisibility(View.GONE);
+            binding.pieChart.setVisibility(View.VISIBLE);
+        });
 
         entries = report.getContent().stream().map(this::parsePieEntries).collect(Collectors.toList());
         PieDataSet dataSet = new PieDataSet(entries, getString(R.string.category));

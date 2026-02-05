@@ -3,6 +3,8 @@ package com.fealrias.purchasehistory.ui.home.dashboard;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +23,8 @@ import com.fealrias.purchasehistory.data.model.DashboardComponent;
 import com.fealrias.purchasehistory.databinding.FragmentDashboardBinding;
 import com.fealrias.purchasehistory.ui.home.dashboard.purchases.PurchaseFilterDialog;
 import com.fealrias.purchasehistory.util.AndroidUtils;
+import com.fealrias.purchasehistory.web.clients.PurchaseClient;
+import com.fealrias.purchasehistorybackend.models.views.outgoing.analytics.PurchaseListView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -30,6 +34,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import lombok.NoArgsConstructor;
@@ -42,19 +48,25 @@ public class DashboardFragment extends RefreshablePurchaseFragment implements Cu
     private FragmentDashboardBinding binding;
     private PurchaseFilterDialog filterDialog;
 
+    @Inject
+    PurchaseClient client;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
+        super.setLoadingScreen(binding.loadingBar);
+        super.setDataToHide(binding.dashboardDataView);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         initializeDashboardFragments();
         filterDialog = new PurchaseFilterDialog(true);
         binding.filterBar.filterBtn.setOnClickListener(v -> openFilter());
+        binding.empty.addNewPurchaseButton.setOnClickListener((v) -> NavHostFragment.findNavController(this).navigate(R.id.navigation_qrscanner, new Bundle()));
         binding.dashboardScanQr.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
             bundle.putBoolean(Constants.Arguments.OPEN_CAMERA, true);
@@ -66,6 +78,7 @@ public class DashboardFragment extends RefreshablePurchaseFragment implements Cu
 
     private void initializeDashboardFragments() {
         new Thread(() -> {
+            PurchaseListView allPurchases = client.getAllPurchases(super.filterViewModel.getFilterValue());
             List<DashboardComponent> savedFragments = getFragmentsFromPreferences();
             if (savedFragments == null || savedFragments.isEmpty()) {
                 savedFragments = new ArrayList<>(Constants.DEFAULT_COMPONENTS);
@@ -75,7 +88,12 @@ public class DashboardFragment extends RefreshablePurchaseFragment implements Cu
                     savedFragments.add(defaultComponent);
                 } // upon application update, the saved fragments might not contain the new default components
             }
-            setupFragments(savedFragments, savedFragments);
+            FragmentTransaction fragmentTransaction = setupFragments(savedFragments, savedFragments);
+            new Handler(Looper.getMainLooper()).post(() -> {
+                setEmptyState(allPurchases);
+                fragmentTransaction.commitNow();
+                isRefreshing.postValue(false);
+            });
         }).start();
     }
 
@@ -116,27 +134,41 @@ public class DashboardFragment extends RefreshablePurchaseFragment implements Cu
 
     public void refresh(PurchaseFilter filter) {
         if (binding == null) return;
+        isRefreshing.setValue(true);
         applyFilter(filter);
+        new Thread(() -> {
+            PurchaseListView allPurchases = client.getAllPurchases(filter);
+            new Handler(Looper.getMainLooper()).post(() -> setEmptyState(allPurchases));
+            isRefreshing.postValue(false);
+        }).start();
+
+    }
+
+    private void setEmptyState(PurchaseListView content) {
+        boolean isEmpty = content == null || content.getContent().isEmpty();
+        binding.dashboardFragmentsLinearLayout.setVisibility(isEmpty ? View.INVISIBLE: View.VISIBLE);
+        binding.empty.getRoot().setVisibility(isEmpty ? View.VISIBLE: View.INVISIBLE);
     }
 
 
-    private void setupFragments(List<DashboardComponent> fragments, List<DashboardComponent> newFragments) {
+    private FragmentTransaction setupFragments(List<DashboardComponent> fragments, List<DashboardComponent> newFragments) {
         FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
         for (int i = 0; i < fragments.size(); i++) {
             Fragment fragment = getParentFragmentManager().findFragmentByTag("dashboardFragment" + i);
             if (fragment != null)
                 transaction.remove(fragment);
         }
-        for (int i = 0; i < newFragments.size(); i++) {
-            DashboardComponent selectedFragment = newFragments.get(i);
-            if (selectedFragment.isVisible()) {
-                DashboardCardFragment dashboardCardFragment = new DashboardCardFragment(selectedFragment);
-                if (i == newFragments.size() - 1 && dashboardCardFragment.getArguments() != null) {
-                    dashboardCardFragment.getArguments().putInt("marginBottom", 200);
+            for (int i = 0; i < newFragments.size(); i++) {
+                DashboardComponent selectedFragment = newFragments.get(i);
+                if (selectedFragment.isVisible()) {
+                    DashboardCardFragment dashboardCardFragment = new DashboardCardFragment(selectedFragment);
+                    if (i == newFragments.size() - 1 && dashboardCardFragment.getArguments() != null) {
+                        dashboardCardFragment.getArguments().putInt("marginBottom", 200);
+                    }
+                    transaction.add(binding.dashboardFragmentsLinearLayout.getId(), dashboardCardFragment, "dashboardFragment" + i);
                 }
-                transaction.add(binding.dashboardFragmentsLinearLayout.getId(), dashboardCardFragment, "dashboardFragment" + i);
             }
-        }
-        transaction.commit();
+
+        return transaction;
     }
 }

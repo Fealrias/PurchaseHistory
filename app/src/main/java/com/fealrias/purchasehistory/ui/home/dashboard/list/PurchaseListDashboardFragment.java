@@ -89,7 +89,7 @@ public class PurchaseListDashboardFragment extends RefreshablePurchaseFragment {
             llm.setOrientation(LinearLayoutManager.VERTICAL);
             new Handler(Looper.getMainLooper()).post(() -> {
                 if (binding != null) {
-                    setShowEmptyView(purchases.isEmpty());
+                    binding.emptyView.getRoot().setVisibility(purchases.isEmpty() ? View.VISIBLE : View.GONE);
                     binding.emptyView.addNewPurchaseButton.setOnClickListener((v) -> NavHostFragment.findNavController(this).navigate(R.id.navigation_qrscanner, new Bundle()));
                     binding.purchaseSumText.setText(AndroidUtils.formatCurrency(purchaseListView.getTotalSum()));
                     binding.purchaseList.setLayoutManager(llm);
@@ -142,7 +142,8 @@ public class PurchaseListDashboardFragment extends RefreshablePurchaseFragment {
 
     private void updateAdapter(PurchaseListView allPurchases) {
         new Handler(Looper.getMainLooper()).post(() -> {
-            setShowEmptyView(allPurchases.getContent().isEmpty());
+            if (binding == null) return;
+            binding.emptyView.getRoot().setVisibility(allPurchases.getContent().isEmpty() ? View.VISIBLE : View.GONE);
             purchasesAdapter.setPurchaseViews(allPurchases.getContent());
             binding.purchaseSumText.setText(AndroidUtils.formatCurrency(allPurchases.getTotalSum()));
             updateSeeAllButton(allPurchases.getContent().size(), maxSize);

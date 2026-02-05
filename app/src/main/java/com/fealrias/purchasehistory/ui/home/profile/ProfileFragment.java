@@ -85,8 +85,8 @@ public class ProfileFragment extends Fragment {
                 CategoryAnalyticsEntry category = userAnalytics.getMostFrequentlyPurchasedCategory();
                 if (category != null) {
                     int color = AndroidUtils.getColor(category.getCategory());
-                    Drawable background = binding.mostFrequentlyPurchasedCategoryName.getBackground();
-                    background.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.OVERLAY));
+                    Drawable background = binding.mostFrequentlyPurchasedCategoryName.getBackground().mutate();
+                    background.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
                     binding.mostFrequentlyPurchasedCategoryName.setTextColor(requireContext().getColor(R.color.text));
                     binding.mostFrequentlyPurchasedCategoryName.setText(category.getCategory().getName());
 

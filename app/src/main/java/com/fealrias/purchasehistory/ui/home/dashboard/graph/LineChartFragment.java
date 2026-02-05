@@ -106,15 +106,17 @@ public class LineChartFragment extends RefreshablePurchaseFragment implements On
         new Thread(() -> {
             isRefreshing.postValue(true);
             CalendarReport calendarReport = purchaseClient.getCalendarReport(filter);
-            if (calendarReport.getContent().isEmpty()) {
-                binding.noDataComponent.getRoot().setVisibility(View.VISIBLE);
-                binding.lineChartView.setVisibility(View.GONE);
-                binding.noDataComponent.addNewPurchaseButton.setOnClickListener((v) -> NavHostFragment.findNavController(this).navigate(R.id.navigation_qrscanner, new Bundle()));
-                isRefreshing.postValue(false);
-                return;
-            }
-            binding.lineChartView.setVisibility(View.VISIBLE);
-            binding.noDataComponent.getRoot().setVisibility(View.GONE);
+            new Handler(Looper.getMainLooper()).post(() -> {
+                if (calendarReport.getContent().isEmpty()) {
+                    binding.noDataComponent.getRoot().setVisibility(View.VISIBLE);
+                    binding.lineChartView.setVisibility(View.GONE);
+                    binding.noDataComponent.addNewPurchaseButton.setOnClickListener((v) -> NavHostFragment.findNavController(this).navigate(R.id.navigation_qrscanner, new Bundle()));
+                    isRefreshing.postValue(false);
+                    return;
+                }
+                binding.lineChartView.setVisibility(View.VISIBLE);
+                binding.noDataComponent.getRoot().setVisibility(View.GONE);
+            });
             Map<LocalDate, List<Entry>> entriesMap = getEntries(calendarReport);
             ArrayList<Integer> colors = getColors();
             LineData data = new LineData();
@@ -170,7 +172,7 @@ public class LineChartFragment extends RefreshablePurchaseFragment implements On
     @NotNull
     private Map<LocalDate, List<Entry>> getEntries(CalendarReport calendarReport) {
         Map<LocalDate, List<Entry>> map = new HashMap<>();
-        if(calendarReport!=null){
+        if (calendarReport != null) {
             for (CalendarReportEntry calendarReportEntry : calendarReport.getContent()) {
                 LocalDate key = calendarReportEntry.getLocalDate().withDayOfMonth(1);
                 List<Entry> entries = map.computeIfAbsent(key, (k) -> new ArrayList<>());
@@ -191,8 +193,8 @@ public class LineChartFragment extends RefreshablePurchaseFragment implements On
             binding.lineChartView.notifyDataSetChanged();
             binding.lineChartView.animateY(1000);
             binding.lineChartView.invalidate();
-            new Thread(()->{
-                if (legendId != null && getActivity()!=null) {
+            new Thread(() -> {
+                if (legendId != null && getActivity() != null) {
                     Legend legend = binding.lineChartView.getLegend();
                     ListView listView = getActivity().findViewById(legendId);
                     legend.setEnabled(AndroidUtils.setLegendList(legend, listView));

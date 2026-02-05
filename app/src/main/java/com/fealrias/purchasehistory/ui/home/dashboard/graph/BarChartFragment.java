@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
@@ -138,16 +139,17 @@ public class BarChartFragment extends RefreshablePurchaseFragment implements OnC
     }
 
     private void updateChart(PurchaseFilter filter, CalendarReport calendarReport, List<CategoryView> allCategories) {
-        if (calendarReport.getContent().isEmpty()) {
-            binding.noDataComponent.getRoot().setVisibility(View.VISIBLE);
-            binding.barChartView.setVisibility(View.GONE);
-            binding.noDataComponent.addNewPurchaseButton.setOnClickListener((v) -> NavHostFragment.findNavController(this).navigate(R.id.navigation_qrscanner, new Bundle()));
-            isRefreshing.postValue(false);
-            return;
-        }
-        binding.noDataComponent.getRoot().setVisibility(View.GONE);
-        binding.barChartView.setVisibility(View.VISIBLE);
-
+        new Handler(Looper.getMainLooper()).post(() -> {
+            if (calendarReport.getContent().isEmpty()) {
+                binding.noDataComponent.getRoot().setVisibility(View.VISIBLE);
+                binding.barChartView.setVisibility(View.GONE);
+                binding.noDataComponent.addNewPurchaseButton.setOnClickListener((v) -> NavHostFragment.findNavController(this).navigate(R.id.navigation_qrscanner, new Bundle()));
+                isRefreshing.postValue(false);
+                return;
+            }
+            binding.noDataComponent.getRoot().setVisibility(View.GONE);
+            binding.barChartView.setVisibility(View.VISIBLE);
+        });
         Map<LocalDate, List<CalendarReportEntry>> content = prepareContent(filter, calendarReport, allCategories);
         List<String> labels = new ArrayList<>();
         List<Integer> colors = new ArrayList<>();
@@ -161,7 +163,7 @@ public class BarChartFragment extends RefreshablePurchaseFragment implements OnC
         LocalDate dateIterator = filter.getFrom();
         for (; dateIterator.isBefore(filter.getTo().plusDays(1)); dateIterator = dateIterator.plusDays(1L)) {
             List<CalendarReportEntry> entriesByDate = content.get(dateIterator);
-            if (entriesByDate!=null)
+            if (entriesByDate != null)
                 entries.add(parseBarEntries(dateIterator, entriesByDate));
         }
         BarDataSet barDataSet = new BarDataSet(entries, "Purchases");
@@ -208,6 +210,7 @@ public class BarChartFragment extends RefreshablePurchaseFragment implements OnC
         }
         return new BarEntry(x, list, entries);
     }
+
     public void refresh(PurchaseFilter filter) {
         if (binding == null) return;
         new Thread(() -> setData(filter)).start();

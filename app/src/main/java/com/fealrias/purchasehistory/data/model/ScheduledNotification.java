@@ -49,6 +49,7 @@ public class ScheduledNotification implements Parcelable {
     public ScheduledNotification(Long id) {
         this.id = id;
     }
+
     public ScheduledNotification(ScheduledExpenseView expense) {
         this.id = expense.getId();
         this.timestamp = getEpochMilli(expense);
@@ -131,6 +132,14 @@ public class ScheduledNotification implements Parcelable {
         ScheduledNotification that = (ScheduledNotification) object;
 
         return Objects.equals(id, that.id);
+    }
+
+    public boolean fullEquals(ScheduledNotification n) {
+        return this.equals(n) && this.timestamp == n.getTimestamp()
+                && this.enabled == n.getEnabled()
+                && Objects.equals(this.price, n.getPrice())
+                && Objects.equals(this.currency, n.getCurrency())
+                && Objects.equals(this.note, n.getNote());
     }
 
     @Override

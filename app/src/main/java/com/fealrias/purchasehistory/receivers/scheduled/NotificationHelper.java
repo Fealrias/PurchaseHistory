@@ -1,5 +1,8 @@
 package com.fealrias.purchasehistory.receivers.scheduled;
 
+import static android.content.Context.MODE_PRIVATE;
+import static com.fealrias.purchasehistory.data.Constants.Arguments.NOTIFICATION_EXTRA_ARG;
+
 import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -8,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
+
 import com.fealrias.purchasehistory.data.Constants;
 import com.fealrias.purchasehistory.data.model.ScheduledNotification;
 import com.fealrias.purchasehistorybackend.models.views.outgoing.ScheduledExpenseView;
@@ -16,9 +20,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import static android.content.Context.MODE_PRIVATE;
-import static com.fealrias.purchasehistory.data.Constants.Arguments.NOTIFICATION_EXTRA_ARG;
 
 public class NotificationHelper {
     private static final String TAG = "SchaeduledExpenseNotification";
@@ -106,7 +107,8 @@ public class NotificationHelper {
         SharedPreferences.Editor editor = preferences.edit();
         for (ScheduledExpenseView s : scheduledExpenses) {
             ScheduledNotification notification = new ScheduledNotification(s);
-            list.add(notification);
+            if (!identicalAlarmExists(context,notification, preferences))
+                list.add(notification);
         }
         for (Map.Entry<String, ?> entry : preferences.getAll().entrySet()) {
             String key = entry.getKey();
@@ -123,6 +125,18 @@ public class NotificationHelper {
         intent.putParcelableArrayListExtra(NOTIFICATION_EXTRA_ARG, list);
         context.sendBroadcast(intent);
 
+    }
+
+    private static boolean identicalAlarmExists(Context context, ScheduledNotification n, SharedPreferences prefs) {
+        int requestCode = Math.toIntExact(n.getId());
+        Intent intent = new Intent(context, ScheduledNotificationReceiver.class);
+        PendingIntent existingPi = PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_NO_CREATE | PendingIntent.FLAG_IMMUTABLE);
+        if (existingPi == null) return false;
+        ScheduledNotification storedN = intent.getParcelableExtra(ScheduledNotificationReceiver.SCHEDULED_NOTIFICATION_EXTRA);
+
+        if (storedN == null) return false;
+
+        return storedN.fullEquals(n);
     }
 
     public static NotificationChannel getOrCreateChannel(NotificationManager manager, String channelId, String name) {

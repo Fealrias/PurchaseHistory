@@ -1,5 +1,8 @@
 package com.fealrias.purchasehistory.receivers.scheduled;
 
+import static android.content.Context.MODE_PRIVATE;
+import static com.fealrias.purchasehistory.receivers.scheduled.NotificationHelper.SCHEDULED_NOTIFY;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -9,15 +12,13 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.provider.Settings;
 import android.util.Log;
+
 import com.fealrias.purchasehistory.data.Constants;
 import com.fealrias.purchasehistory.data.model.ScheduledNotification;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.content.Context.MODE_PRIVATE;
-import static com.fealrias.purchasehistory.receivers.scheduled.NotificationHelper.SCHEDULED_NOTIFY;
 
 public class InitiateNotificationReceiver extends BroadcastReceiver {
     private static final String TAG = "InitiateNotificationReceiver";

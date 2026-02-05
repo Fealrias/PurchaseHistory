@@ -74,7 +74,7 @@ public class PurchasesViewHolder extends ViewHolder<PurchaseView> {
             int textColor = AndroidUtils.getTextColor(color);
 
             Drawable background = binding.purchaseCategoryText.getBackground().mutate();
-            background.setColorFilter(new BlendModeColorFilter(color, BlendMode.COLOR));
+            background.setColorFilter(new BlendModeColorFilter(color, BlendMode.SRC_IN));
             binding.purchaseCategoryText.setTextColor(textColor);
         } else {
             binding.purchaseCategoryText.setVisibility(View.INVISIBLE);
