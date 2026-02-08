@@ -22,8 +22,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class HttpClient {
-    //    public static final String HOST_NAME = "https://purchase-history.fealrias.com";
-    public static final String HOST_NAME = "https://angelp-home.zapto.org:9000";
+        public static final String HOST_NAME = "https://purchase-history.fealrias.com";
     public static final String BACKEND_URL = HOST_NAME + "/api";
     protected final OkHttpClient client;
     protected final AuthInterceptor authInterceptor = new AuthInterceptor();

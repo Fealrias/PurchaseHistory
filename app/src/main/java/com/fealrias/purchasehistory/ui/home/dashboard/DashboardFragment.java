@@ -146,8 +146,8 @@ public class DashboardFragment extends RefreshablePurchaseFragment implements Cu
 
     private void setEmptyState(PurchaseListView content) {
         boolean isEmpty = content == null || content.getContent().isEmpty();
-        binding.dashboardFragmentsLinearLayout.setVisibility(isEmpty ? View.INVISIBLE: View.VISIBLE);
-        binding.empty.getRoot().setVisibility(isEmpty ? View.VISIBLE: View.INVISIBLE);
+        binding.dashboardFragmentsLinearLayout.setVisibility(isEmpty ? View.GONE: View.VISIBLE);
+        binding.empty.getRoot().setVisibility(isEmpty ? View.VISIBLE: View.GONE);
     }
 
 

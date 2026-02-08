@@ -43,3 +43,5 @@
 -keepclassmembers,allowobfuscation class * {
     <init>();
 }
+# Suppress all Lombok-related warnings from R8
+ -dontwarn lombok.**

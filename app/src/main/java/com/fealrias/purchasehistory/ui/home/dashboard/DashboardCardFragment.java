@@ -6,15 +6,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
 import androidx.fragment.app.Fragment;
+
 import com.fealrias.purchasehistory.data.Constants;
 import com.fealrias.purchasehistory.data.factories.DashboardComponentsFactory;
 import com.fealrias.purchasehistory.data.interfaces.RefreshablePurchaseFragment;
 import com.fealrias.purchasehistory.data.model.DashboardComponent;
 import com.fealrias.purchasehistory.databinding.FragmentDashboardCardBinding;
 import com.fealrias.purchasehistory.ui.FullscreenGraphActivity;
-import lombok.NoArgsConstructor;
+
 import org.jetbrains.annotations.NotNull;
+
+import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 public class DashboardCardFragment extends Fragment {
@@ -69,7 +73,8 @@ public class DashboardCardFragment extends Fragment {
     private void setMarginBottomIfLast() {
         if (marginBottom == 0) return;
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins(16, 0, 16, marginBottom);
+
+        params.setMargins(params.leftMargin, params.topMargin, params.rightMargin, marginBottom);
         binding.getRoot().setLayoutParams(params);
     }
 
