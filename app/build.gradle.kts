@@ -13,8 +13,8 @@ android {
         applicationId = "com.fealrias.purchasehistory"
         minSdk = 29
         targetSdk = AndroidVersion.VersionCodes.TIRAMISU
-        versionCode = 16
-        versionName = "1.4.2"
+        versionCode = 17
+        versionName = "1.5.0"
         testInstrumentationRunner = "com.fealrias.purchasehistory.setup.CustomTestRunner"
         vectorDrawables {
             useSupportLibrary = true
