@@ -28,7 +28,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
-        android:name="com.angelp.purchasehistory.ui.home.dashboard.DashboardFragment"
+        android:name="com.fealrias.purchasehistory.ui.home.dashboard.DashboardFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

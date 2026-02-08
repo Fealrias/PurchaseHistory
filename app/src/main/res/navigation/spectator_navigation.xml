@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/navigation_spectator_dashboard"
-        android:name="com.angelp.purchasehistory.ui.spectator.dashboard.SpectatorDashboardFragment"
+        android:name="com.fealrias.purchasehistory.ui.spectator.dashboard.SpectatorDashboardFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_spectator_dashboard" />
     <fragment
         android:id="@+id/navigation_spectated_users"
-        android:name="com.angelp.purchasehistory.ui.spectator.users.SpectatedUsersFragment"
+        android:name="com.fealrias.purchasehistory.ui.spectator.users.SpectatedUsersFragment"
         android:label="@string/title_spectated_users"
         tools:layout="@layout/fragment_spectated_users" />
 

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">PurchaseHistory</string>
+    <string name="app_name" >PurchaseHistory</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
@@ -193,8 +193,8 @@ Here you can:\n
     <string name="title_scheduled_expenses">Schedules</string>
     <string name="no_period_selected">No period selected</string>
     <string name="add_purchase_action">Add as a purchase</string>
-    <string name="scheduled_notification_content">A scheduled payment is due. Price: %.2f \nShould we add it to the purchases?</string>
-    <string name="scheduled_notification_title">A payment is due `%s`</string>
+    <string name="scheduled_notification_content">A scheduled payment is due. %s : %s \nShould we add it to the purchases?</string>
+    <string name="scheduled_notification_title">Reminder for upcoming expense `%s`</string>
     <string name="error_must_not_be_empty">Field should not be empty</string>
     <string name="error_price_empty">Enter a valid price</string>
     <string name="turn_on_flashlight">Torch ON</string>
@@ -330,4 +330,7 @@ Here you can:\n
     <string name="showing_balance_for_s">Showing balance for <b>%s</b></string>
     <string name="empty_price" translatable="false">--.--</string>
     <string name="no_monthly_spending_limit_set">No monthly spending limit set</string>
+    <string name="failed_to_load">Failed to load data.\nTry again later.</string>
+    <string name="no_data_for_filter">No data to display for the selected time frame</string>
+    <string name="no_data_for_schedule">You have no scheduled expenses.\nCreate one now to remind you in the future!</string>
 </resources>

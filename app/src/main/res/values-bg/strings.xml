@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name" >Разходи и Анализи</string>
     <string name="title_home">Начало</string>
     <string name="title_dashboard">Табло</string>
     <string name="title_notifications">Известия</string>
@@ -144,7 +145,7 @@
     <string name="tour_navigation_qrscanner_secondary">Използвайте това, за да сканирате QR кодовете на вашите касови бележки и бързо да добавите покупки към историята си.</string>
     <string name="tour_navigation_profile_secondary">Управлявайте настройките на профила си и преглеждайте историята на активността си тук.</string>
     <string name="tour_filter_button_secondary">Винаги можете да промените периода от време или категорията на показаните покупки от тук.</string>
-    <string name="tour_prompt_message">Добре дошли в PurchaseHistory!\nТова е проект, създаден от самостоятелен разработчик в свободното му време, вдъхновен от българската система за QR кодове на касови бележки и желанието ми да видя месечните си разходи. Не се колебайте да се свържете за предложения и проблеми на моя имейл <a href="mailto:purchase.history.bg@gmail.com">purchase.history.bg@gmail.com</a></string>
+    <string name="tour_prompt_message">Добре дошли в приложениетъоРазходи и Анализи!\nТова е проект, създаден от самостоятелен разработчик в свободното му време, вдъхновен от българската система за QR кодове на касови бележки и желанието ми да видя месечните си разходи. Не се колебайте да се свържете за предложения и проблеми на моя имейл <a href="mailto:purchase.history.bg@gmail.com">purchase.history.bg@gmail.com</a></string>
     <string name="terms_of_service">Условия за ползване</string>
     <string name="terms_of_service_text">С използването на това приложение, вие се съгласявате с условията, описани тук.\nПриложението се предоставя такова, каквото е, без никакви гаранции или обещания. Разработчикът не носи отговорност за загуба на данни, щети или други проблеми, които могат да възникнат при използването на приложението.\nВие се съгласявате да използвате приложението на свой риск и да спазвате всички приложими закони и разпоредби.\nРазработчикът си запазва правото да променя тези условия по всяко време без предварително уведомление.</string>
     <string name="privacy">Политика за поверителност</string>
@@ -154,7 +155,7 @@
     <string name="yes">Да</string>
     <string name="no">Не</string>
     <string name="skip">Пропусни</string>
-    <string name="accept_terms">Приемете условията за ползване</string>
+    <string name="accept_terms">Приемам условията за ползване</string>
 
     <string name="next_date">Следваща дата</string>
     <string name="enabled">Активирано</string>
@@ -163,8 +164,8 @@
     <string name="title_scheduled_expenses">Планирани разходи</string>
     <string name="no_period_selected">Не е избран период</string>
     <string name="add_purchase_action">Добави като бележка</string>
-    <string name="scheduled_notification_content">Предстоящо плащане. Цена: %.2f \nДа го добавим ли към покупките?</string>
-    <string name="scheduled_notification_title">Дължимо плащане `%s`</string>
+    <string name="scheduled_notification_content">Предстоящо плащане. %s : %s \nДа го добавим ли към покупките?</string>
+    <string name="scheduled_notification_title">Напомняме за предстоящ разход `%s`</string>
     <string name="error_must_not_be_empty">Попълнете полето, моля</string>
     <string name="error_price_empty">Моля въведете правилна сума</string>
     <string name="turn_on_flashlight">Включване на фенерчето</string>
@@ -324,4 +325,7 @@
     <string name="out_of">от:</string>
     <string name="showing_balance_for_s">Баланса за месец %s</string>
     <string name="no_monthly_spending_limit_set">Не е създаден месечен лимит</string>
+    <string name="failed_to_load">Грешка при зареждането.\nОпитайте отново по-късно</string>
+    <string name="no_data_for_filter">Липсва информация за избраният период</string>
+    <string name="no_data_for_schedule">В момента нямате планирани разходи.\nСъздайте един, който да ви напомни след време!</string>
 </resources>

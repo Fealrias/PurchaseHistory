@@ -6,60 +6,92 @@
     android:layout_height="match_parent"
     tools:context=".ui.home.dashboard.DashboardFragment">
 
-<!--
-    <ImageButton
-        android:id="@+id/customize_dashboardButton"
-        android:layout_width="50dp"
-        android:layout_height="31dp"
-        android:layout_marginEnd="8dp"
-        android:contentDescription="@string/customize_dashboard"
-        android:src="@drawable/baseline_settings_24"
-        android:text="@string/customize_dashboard_view"
-        app:layout_constraintEnd_toStartOf="@+id/dashboard_filterButton"
-        app:layout_constraintTop_toTopOf="@+id/dashboard_filterButton" />
+    <!--
+        <ImageButton
+            android:id="@+id/customize_dashboardButton"
+            android:layout_width="50dp"
+            android:layout_height="31dp"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/customize_dashboard"
+            android:src="@drawable/baseline_settings_24"
+            android:text="@string/customize_dashboard_view"
+            app:layout_constraintEnd_toStartOf="@+id/dashboard_filterButton"
+            app:layout_constraintTop_toTopOf="@+id/dashboard_filterButton" />
 
-    <TextView
-        android:id="@+id/dashboard_filterDateText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/dashboard_filterButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/dashboard_filterButton" />
+        <TextView
+            android:id="@+id/dashboard_filterDateText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/dashboard_filterButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/dashboard_filterButton" />
 
-    <Button
-        android:id="@+id/dashboard_filterButton"
-        style="@style/Primary"
-        android:layout_width="114dp"
-        android:layout_height="27dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginTop="4dp"
-        android:background="@color/design_default_color_secondary"
-        android:contentDescription="@string/filterButton"
-        android:drawableStart="@drawable/ic_menu_filter"
-        android:text="@string/filterButton"
-        app:icon="@drawable/ic_menu_filter"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />-->
-    <include layout="@layout/component_filter_bar" android:id="@+id/filterBar"/>
-
-    <ScrollView
-        android:id="@+id/dashboardScrollView"
+        <Button
+            android:id="@+id/dashboard_filterButton"
+            style="@style/Primary"
+            android:layout_width="114dp"
+            android:layout_height="27dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/design_default_color_secondary"
+            android:contentDescription="@string/filterButton"
+            android:drawableStart="@drawable/ic_menu_filter"
+            android:text="@string/filterButton"
+            app:icon="@drawable/ic_menu_filter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />-->
+    <include
+        android:id="@+id/filterBar"
+        layout="@layout/component_filter_bar" />
+    <LinearLayout
+        android:id="@+id/loading_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/filterBar"
+        android:layout_marginVertical="80dp"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteX="0dp"
-        >
+        app:layout_constraintTop_toBottomOf="@+id/filterBar"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/dashboardFragmentsLinearLayout"
+        <ProgressBar
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_gravity="center" />
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="24dp" />
+            android:gravity="center"
+            android:text="@string/loading" />
+    </LinearLayout>
+    <FrameLayout
+        android:id="@+id/dashboardDataView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/filterBar"
+        >
+        <include
+            android:id="@+id/empty"
+            layout="@layout/no_data"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_marginTop="50dp"/>
+        <ScrollView
+            android:id="@+id/dashboardScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:layout_editor_absoluteX="0dp">
+            <LinearLayout
+                android:id="@+id/dashboardFragmentsLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="24dp"/>
+        </ScrollView>
+    </FrameLayout>
 
-    </ScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/dashboard_scan_qr"
@@ -68,8 +100,8 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:src="@drawable/qr"
-        app:tint="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/black" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

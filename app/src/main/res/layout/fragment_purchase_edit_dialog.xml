@@ -121,9 +121,15 @@
             android:id="@+id/purchaseEdit_categoryAddButton"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:paddingStart="8dp"
             android:drawableStart="@drawable/add"
+            android:drawablePadding="4dp"
             android:layout_weight="3"
-            android:layout_marginStart="10dp"
+            android:maxLines="1"
+            android:layout_marginStart="8dp"
+            android:autoSizeMaxTextSize="16sp"
+            android:autoSizeMinTextSize="8sp"
+            android:autoSizeTextType="uniform"
             android:text="@string/create_category"/>
     </LinearLayout>
 

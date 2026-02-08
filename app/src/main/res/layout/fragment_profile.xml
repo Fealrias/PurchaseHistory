@@ -134,7 +134,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:background="@drawable/bordered_bg"
+                        android:background="@drawable/chip_bg"
                         android:paddingVertical="8dp"
                         android:paddingHorizontal="16dp"
                         android:textAllCaps="true"

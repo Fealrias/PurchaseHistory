@@ -34,10 +34,10 @@
 
         <ProgressBar
             style="?android:attr/progressBarStyle"
-            android:background="@drawable/loading_dimmed"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:background="@drawable/loading_dimmed" />
     </FrameLayout>
 
     <TextView
@@ -57,5 +57,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/no_data_component"
+        layout="@layout/no_data"
+        android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
